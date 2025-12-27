@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Pala Store</title>
+    <link 
+        rel="stylesheet"
+        href="{{ url_for('static', filename='styles/style.css') }}"
+    >
+</head>
+<body>
+    <h1 class="titulo">Pala Store: PCs a tu medida</h1>
+    <div id="productos">
+        <h2 class="titulo">Nuestros productos</h2>
+        <ul id="lista-componentes">
+            <li>Procesador Ryzen 9 7950</li>
+            <img src="{{url_for('static', filename='images/amd_ryzen_9.png')}}" width="150", height="150">         
+            <li>Placa de video Nvidia RTX 4090 24gb</li>
+            <img src="{{url_for('static', filename='images/geforce_rtx_4090.png')}}" width="150", height="150">         
+            <li>Motherboard Gigabyte X670E Aorus Master</li>
+            <img src="{{url_for('static', filename='images/Gigabyte_X670E_Aorus.png')}}" width="150", height="150">         
+        </ul>
+        <button id="boton-ver-mas">Ver más</button>
+    </div>
+    <footer>
+        <p>Mail de contacto: pala_store_clientes@example.com</p>
+        <p>Pala Store {{ year }}</p>
+    </footer>
+    <!-- <script src="{{ url_for('static', filename='js/script.js') }}"></script> -->
+</body>
+</html>

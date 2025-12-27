@@ -1,0 +1,22 @@
+pip install -U pip
+o
+pip install --upgrade pipenv
+
+
+mkdir mi_proyecto
+cd mi_proyecto
+
+CREAR app.py - poner contenido basico ver como hacer
+CREAR .venv
+
+pipenv install flask
+pipenv shell
+
+mateo@mateo-virtual-machine:~/TB022-IDS/parcial/test$ pipenv shell
+Launching subshell in virtual environment...
+mateo@mateo-virtual-machine:~/TB022-IDS/parcial/test$  . /home/mateo/TB022-IDS/parcial/test/.venv/bin/activate
+
+
+
+CREAR TEMPLATES - index.html con el html:5
+CREAR STATIC - crear subcarpetas images, css, js

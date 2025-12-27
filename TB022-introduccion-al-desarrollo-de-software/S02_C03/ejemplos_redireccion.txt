@@ -1,0 +1,4 @@
+#date > fecha.txt
+jue 21 mar 2024 18:53:19 -03
+#hostname >> fecha.txt
+mateo-virtual-machine

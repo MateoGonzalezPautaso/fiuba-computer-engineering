@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>S05 C09</title>
+    <link 
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css', _external=True) }}"
+    >
+</head>
+<body>
+    <label for="cadena1"> Ingrese el primer campo de texto</label><br>
+    <input type="text" id="cadena1" name="campo1"><br><br>
+
+    <label for="cadena2"> Ingrese el segundo campo de texto</label><br>
+    <input type="text" id="cadena2" name="campo2"><br><br>
+
+    <button id="boton_concatenador">Sumar campos de texto</button>
+
+    <script src="{{ url_for('static', filename='js/script.js', _external=True) }}"></script>
+
+</body>
+</html>

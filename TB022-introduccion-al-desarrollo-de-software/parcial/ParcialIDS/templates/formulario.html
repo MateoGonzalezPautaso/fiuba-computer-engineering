@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div class="formulario">
+    <form action="{{ url_for('Formulario') }}" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="fnombre" placeholder="Nombre Alumno">
+        </br>
+        <label for="apellido">Apellido:</label>
+        <input type="text" id="apellido" name="fapellido" placeholder="Apellido Alumno">
+        </br>
+        <label for="celular">Celular:</label>
+        <input type="text" id="celular" name="fcelular" placeholder="Celular">
+        </br>
+        <label for="direc">Dirección:</label>
+        <input type="text" id="direc" name="fdirec" placeholder="Direccion">
+        </br>
+        <label for="dni">DNI:</label>
+        <input type="text" id="dni" name="fdni" placeholder="DNI">
+        </br>
+        <button type="submit">Enviar</button>
+    </form>
+</div>
+
+{% endblock %}
+

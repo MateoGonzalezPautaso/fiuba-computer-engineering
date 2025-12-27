@@ -1,0 +1,4 @@
+28.764.999;Bruno;Gutierrez;casado;36
+22.222.222;Alberto;Garcia;casado;55
+33.333.333;Claudia;Riccio;casada;40
+55.555.555;Soledad;Villamil;casada;24

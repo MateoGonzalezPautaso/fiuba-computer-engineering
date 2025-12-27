@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>1er Parcial de Introducción al Desarrollo de Software</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="{{ url_for('static', filename='/css/style.css', _external=True) }}" />
+	</head>
+	<body>
+		<div id="header">
+			<img src="{{ url_for('static', filename='/images/fiuba_logo.jpeg', _external=True) }}" alt="FIUBA">
+		</div>
+
+		{% block body %}
+
+		{% endblock %}
+
+	</body>
+</html>

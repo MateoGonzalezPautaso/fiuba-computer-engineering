@@ -1,0 +1,139 @@
+{% if user %}
+	Hello, {{ user }}
+{% else %}
+	Hello, stranger
+{% endif %}
+
+ul
+{% for comment in comments %}
+li	{{ comment }}
+{% endfor %}
+ul
+
+
+font
+	family
+	size
+	style
+	color
+
+display
+padding
+margin
+border-radius
+width
+height
+opacity
+flex
+
+background-image: url('../images/background.jpg');
+
+
+let numero = 8
+if (numero < 20) {
+	console.log("El número es menor a 20")
+} else if (numero == 20) {
+	console.log("El número es igual a 20")
+} else {
+	console.log("El número es mayor a 20")
+}
+
+while (numero < 20) {
+	numero++  // numero = numero + 1
+}
+
+for (let i=1; i<5; i++) {
+	const nuevoValor = numero + i
+	console.log("Ahora el número vale: " + nuevoValor)
+} 
+
+const color = "red"
+
+switch(color) {
+	case "red": {
+		console.log("El color es rojo")
+		break
+	}   
+	
+	case "blue": {        
+		console.log("El color es azul")        
+		break    
+	}    
+	
+	case "yellow": {        
+		console.log("El color es amarillo")        
+		break    
+	}    
+	
+	default: {        
+		console.log("El color no existe")    
+	}    
+	
+}
+
+const, let, var, number, string, object, null, undefined, function, if, else,
+true, false, return,for, break, continue, while, switch, this, in, length, document
+
+function modulo(x, y){
+	const suma = x + y
+	return suma
+}
+
+const modulo = function(x, y){
+	const modulo = Math.sqrt(x * x)
+}
+
+const suma = (x, y) => x + y
+
+typeof suma
+
+const filtrados = numeros.filter(x => x % 2 == 0)
+
+const pokemonURL = "https://pokeapi.co/api/v2/pokemon?limit=3&offset=0"
+fetch(pokemonURL)
+	.then(response => response.json())
+	.then(json => console.log(json))
+
+
+const botonAlerta = document.getElementById("alerta")
+botonAlerta.addEventListener("click",function(event) {
+	alert("Hola mundo!")
+})
+
+
+const botonAlerta = document.getElementById("alerta")
+botonAlerta.onclick = function(event) {
+	alert("Hola mundo!")
+}
+
+
+const title = document.getElementById("titulo")
+title.addEventListener("mouseover", () => {
+alert("Hola")
+})
+const changeColor = document.getElementById("change-color")
+changeColor.onclick = function (event) {
+const R = randomNumber().toString()
+const G = randomNumber().toString()
+const B = randomNumber().toString()
+title.style.color = `rgb(${R},${G},${B})`
+}
+function randomNumber() {
+return (Math.random() * 256).toFixed(0)
+}
+
+
+/**
+ * 
+ * 
+ * documentacion java
+ * 
+ * 
+ * 
+ */
+// comentario java
+
+
+
+Tambien se puede desabilitar el debugger de flask:
+app.run(debug=True, use_debugger=False, use_reloader=False)

@@ -1,0 +1,12 @@
+Command 'png' not found, did you mean:
+  command 'dng' from deb openstructure (2.3.1-2build1)
+  command 'pmg' from deb python3-pymatgen (2022.0.17+dfsg1-1build1)
+  command 'ng' from deb ng-common (1.5~beta1-10)
+  command 'pig' from deb bsdgames (2.17-29)
+  command 'ping' from deb iputils-ping (3:20211215-1)
+  command 'ping' from deb inetutils-ping (2:2.2-2ubuntu0.1)
+  command 'peg' from deb peg (0.1.18-1)
+  command 'sng' from deb sng (1.1.0-4)
+Try: sudo apt install <deb name>
+Command 'ccat' not found, but can be installed with:
+sudo apt install ccrypt

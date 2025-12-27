@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<div>
+    <h1>Este examen corresponde a "{{ nombre }} {{ apellido }}"</h1>
+    <p>Haga <a href="{{ url_for('Formulario') }}">click aqui</a> para continuar</p>
+</div>
+
+{% endblock %}

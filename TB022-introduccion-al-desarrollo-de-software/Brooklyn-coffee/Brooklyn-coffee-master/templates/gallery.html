@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title%}Este es el título del sitio web IDS{% endblock %}
+{% block body %}
+
+
+	<div id="fh5co-gallery" class="fh5co-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 fh5co-heading animate-box">
+					<h2>Our Gallery</h2>
+					<div class="row">
+						<div class="col-md-6">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ab debitis sit itaque totam, a maiores nihil, nulla magnam porro minima officiis! Doloribus aliquam voluptates corporis et tempora consequuntur ipsam, itaque, nesciunt similique commodi omnis. Ad magni perspiciatis, voluptatum repellat.</p>
+						</div>
+					</div>
+				</div>
+				
+
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_1.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_2.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-6 col-sm-6 fh5co-gallery_item">
+					<div class="fh5co-bg-img fh5co-gallery_big" style="background-image: url('static/images/gallery_8.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_4.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_5.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_5.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_6.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_7.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_8.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-6 col-sm-6 fh5co-gallery_item">
+					<div class="fh5co-bg-img fh5co-gallery_big" style="background-image: url('static/images/gallery_9.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_1.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_2.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-6 col-sm-6 fh5co-gallery_item">
+					<div class="fh5co-bg-img fh5co-gallery_big" style="background-image: url('static/images/gallery_8.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_4.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_5.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_5.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_6.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-3 col-sm-3 fh5co-gallery_item">
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_7.jpeg');" data-trigger="zoomerang"></div>
+					<div class="fh5co-bg-img" style="background-image: url('static/images/gallery_8.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+				<div class="col-md-6 col-sm-6 fh5co-gallery_item">
+					<div class="fh5co-bg-img fh5co-gallery_big" style="background-image: url('static/images/gallery_9.jpeg');" data-trigger="zoomerang"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="fh5co-featured-testimony" class="fh5co-section">
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12 fh5co-heading animate-box">
+					<h2>Testimony</h2>
+					<div class="row">
+						<div class="col-md-6">
+							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ab debitis sit itaque totam, a maiores nihil, nulla magnam porro minima officiis! Doloribus aliquam voluptates corporis et tempora consequuntur ipsam, itaque, nesciunt similique commodi omnis.</p>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-5 animate-box img-to-responsive animate-box" data-animate-effect="fadeInLeft">
+						<img src="{{ url_for('static', filename='images/person_1.jpg', _external=True) }}" alt="Error">
+				</div>
+				<div class="col-md-7 animate-box" data-animate-effect="fadeInRight">
+					<blockquote>
+						<p> &ldquo; Quantum ipsum dolor sit amet, consectetur adipisicing elit. Reiciendis ab debitis sit itaque totam, a maiores nihil, nulla magnam porro minima officiis! Doloribus aliquam voluptates corporis et tempora consequuntur ipsam. &rdquo;</p>
+						<p class="author"><cite>&mdash; Jane Smith</cite></p>
+					</blockquote>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	
+
+	<script>Zoomerang.config({ maxHeight: 600, maxWidth: 900, bgColor: '#000', bgOpacity: .85}).listen('[data-trigger="zoomerang"]')</script>
+
+{% endblock %}

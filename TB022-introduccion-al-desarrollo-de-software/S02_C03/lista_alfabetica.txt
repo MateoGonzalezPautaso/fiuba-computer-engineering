@@ -1,0 +1,9 @@
+
+a
+f
+g
+i
+# sort < mi_lista.txt
+# sort < mi_lista.txt > lista_alfabetica.txt
+u
+z
