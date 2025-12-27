@@ -17,6 +17,7 @@
 | `/mi_proyecto` | General Practice Project |
 | `/parcial` | Midterm Exam Content |
 | `/parcialito1` | Quiz 1 Practice Exercises |
+| `/TP1` | Practical Assignment 1 |
 | `/S01_C02` | Class Exercises (Week 1 / Class 2) |
 | `/S02_C03` | Class Exercises (Week 2 / Class 3) |
 | `/S05_C09` | Class Exercises (Week 5 / Class 9) |

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block body %}
+
+	<header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url(images/img_bg_3.jpg)">
+		<div class="overlay"></div>
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12 col-md-offset-0 text-center">
+
+					<div class="row row-mt-15em">
+						<div class="col-md-12 mt-text animate-box" data-animate-effect="fadeInUp">
+							<span class="intro-text-small">Recetas FIUBA</span>
+							<h1 class="cursive-font">Inicio de sesión</h1>
+							<h4 class="intro-text-small">Para sugerir recetas es necesario iniciar sesión</h4>
+						</div>
+						
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</header>
+	
+	
+	<div class="gtco-section">
+		<div class="gtco-container">
+			<div class="row">
+				<div class="col-md-12">
+					<div class="col-md-6 animate-box">
+					<h3>Inicio de sesión:</h3>
+					<form action="{{ url_for('login') }}" method='post'>
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="sr-only" for="username">Username</label>
+								<input type="text" name="username_form" class="form-control" placeholder="Nombre de usuario" required>
+							</div>
+							
+						</div>
+
+						<div class="row form-group">
+							<div class="col-md-12">
+								<label class="sr-only" for="password">Contraseña</label>
+								<input type="password" name="password_form" class="form-control" placeholder="Contraseña" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<input type="submit" value="Iniciar Sesión" class="btn btn-primary">
+						</div>
+
+					</form>		
+				</div>
+				<div class="col-md-5 col-md-push-1 animate-box">
+					
+					<div class="gtco-contact-info">
+						<h3>Información de contacto</h3>
+						<ul>
+							<li class="address">Av. Paseo Colón 850, <br> Cdad. Autónoma de Buenos Aires C1063</li>
+							<li class="phone"><a href="tel://1234567920"> +54 9 11 1234-7698</a></li>
+							<li class="email"><a href="mailto:info@yoursite.com"> recetasfiuba@fi.uba.ar</a></li>
+						</ul>
+					</div>
+
+
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+
+{% endblock %}

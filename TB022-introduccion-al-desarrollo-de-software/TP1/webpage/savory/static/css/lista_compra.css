@@ -1,0 +1,28 @@
+#lista-compra {
+    list-style-type: none; /* Quita los estilos por defecto de las viñetas */
+    padding: 0;
+    margin-top: 20px; /* Espacio superior */
+}
+
+.ingrediente-lista {
+    padding: 10px 0; /* Espaciado interno superior y inferior */
+    border-bottom: 1px solid #999; /* Borde inferior gris */
+    font-size: 18px; /* Tamaño de fuente aumentado */
+    color: #333; /* Color de texto oscuro */
+}
+
+
+.ingrediente-lista::before {
+    content: "\2022"; 
+    color: #e79d1e; 
+    font-weight: bold; 
+    display: inline-block; 
+    width: 1em; 
+    margin-left: -1em; 
+}
+
+
+#titulo-lista {
+    font-size: 28px;
+    margin-bottom: 20px; 
+}

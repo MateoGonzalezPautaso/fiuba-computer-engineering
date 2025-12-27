@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %} Tu lista de la compra {% endblock %}
+
+{% block style %} 
+<link rel="stylesheet" href="{{ url_for('static',filename='css/lista_compra.css') }}">
+{% endblock %}
+
+
+{% block body %}
+
+<header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url(static/images/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-center">
+                <div class="row row-mt-15em">
+                    <div class="col-md-12 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">Hecho por alumnos de <a href="https://www.fi.uba.ar/" target="_blank">FIUBA</a></span>
+                        <h1 class="cursive-font">¡Listo!</h1>	
+                    </div>
+                </div>  
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="gtco-section">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6 animate-box">
+                    <h2 id="titulo-lista">Tu lista de la compra:</h2>
+                    <ul id="lista-compra">
+                        {% for ingrediente in dicc %}
+                        <li class="ingrediente-lista">{{ ingrediente }}: {{ dicc[ingrediente] }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

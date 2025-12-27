@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %} Seleccion de recetas {% endblock %}
+
+{% block style %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/checkbox.css')}}">
+{% endblock %}
+
+
+{% block body %}	
+<header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner" style="background-image: url(static/images/img_bg_1.jpg)" data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12 col-md-offset-0 text-center">
+                
+
+                <div class="row row-mt-15em">
+                    <div class="col-md-12 mt-text animate-box" data-animate-effect="fadeInUp">
+                        <span class="intro-text-small">Hecho por alumnos de <a href="https://www.fi.uba.ar/" target="_blank">FIUBA</a></span>
+                        <h1 class="cursive-font">Elige lo que quieras cocinar!</h1>	
+                    </div>
+                    
+                </div>
+                        
+                
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="gtco-section">
+    <div class="gtco-container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6 animate-box">
+                    <h2>Seleccione las recetas:</h2>
+                    <p>Porfavor, seleccione al menos dos</p>
+                    <form method="POST" action="{{url_for('seleccion')}}" onsubmit="return validateForm()" >
+                        <div class="checkbox-container">
+                            {% for receta in lista_recetas %}
+                                    <input type="checkbox" class="check" name="recetas" value="{{receta}}">
+                                    <label class="checkbox-label">{{receta}}</label>
+                            {% endfor %}
+                        </div>
+                        <input type="submit" value="Enviar" class="btn btn-primary">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Script que verifica que por lo menos hayan 2 checkbox seleccionadas-->
+<script src="{{ url_for('static', filename='js/validate-form.js') }}"></script>
+
+
+{% endblock %}
