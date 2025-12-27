@@ -1,0 +1,34 @@
+name: asmlab-action
+
+on:
+  push:
+    branches: 
+      - asmlab
+  pull_request:
+    branches:
+      - asmlab
+
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    name: asmlab-unit-test
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3.3.0
+    - name: test
+      id: test
+      uses: orgacomp/actions@asmlab-action
+      with:
+        target: 'runUnitTests'
+
+  intensive-test:
+    runs-on: ubuntu-latest
+    name: asmlab-intensive-test
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3.3.0
+    - name: test
+      id: test
+      uses: orgacomp/actions@asmlab-action
+      with:
+        target: 'runIntensiveTests'

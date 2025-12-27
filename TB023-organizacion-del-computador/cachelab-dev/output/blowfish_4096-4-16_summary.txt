@@ -1,0 +1,7 @@
+4-way, 16 sets, size = 4KB
+loads 60773 stores 39227 total 100000
+rmiss 817 wmiss 85 total 902
+dirty rmiss 132 dirty wmiss 0
+bytes read 57728 bytes written 8448
+read time 155673 write time 47727
+miss rate 0.009020

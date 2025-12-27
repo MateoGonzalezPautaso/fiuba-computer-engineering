@@ -1,0 +1,109 @@
+== Array ==
+
+Agregar
+
+0 - []
+1 - [aa]
+2 - [aa,bb]
+3 - [aa,bb,dd]
+
+Get
+
+3 - [aa,bb,dd]
+aa
+bb
+dd
+(null)
+
+Quitar
+
+2 - [bb,dd] - aa
+1 - [bb] - dd
+0 - [] - bb
+
+Swap
+
+3 - [aa,bb,dd]
+3 - [aa,bb,dd]
+3 - [aa,bb,dd]
+3 - [aa,bb,dd]
+3 - [dd,bb,aa]
+3 - [aa,bb,dd]
+3 - [bb,dd,aa]
+
+Agregar de mas
+
+3 - [bb,dd,aa]
+4 - [bb,dd,aa,aa]
+5 - [bb,dd,aa,aa,bb]
+6 - [bb,dd,aa,aa,bb,dd]
+7 - [bb,dd,aa,aa,bb,dd,ff]
+8 - [bb,dd,aa,aa,bb,dd,ff,00]
+9 - [bb,dd,aa,aa,bb,dd,ff,00,zz]
+10 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc]
+11 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee]
+12 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg]
+13 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh]
+14 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa]
+15 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb]
+16 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd]
+17 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff]
+18 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00]
+19 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+
+Quitar de mas
+
+20 - [bb,dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc]
+19 - [dd,aa,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc] - bb
+18 - [dd,aa,bb,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc] - aa
+17 - [dd,aa,dd,ff,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc] - bb
+16 - [dd,aa,dd,00,zz,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc] - ff
+15 - [dd,aa,dd,00,cc,ee,gg,hh,aa,bb,dd,ff,00,zz,cc] - zz
+14 - [dd,aa,dd,00,cc,gg,hh,aa,bb,dd,ff,00,zz,cc] - ee
+13 - [dd,aa,dd,00,cc,gg,aa,bb,dd,ff,00,zz,cc] - hh
+12 - [dd,aa,dd,00,cc,gg,aa,dd,ff,00,zz,cc] - bb
+11 - [dd,aa,dd,00,cc,gg,aa,dd,00,zz,cc] - ff
+10 - [dd,aa,dd,00,cc,gg,aa,dd,00,cc] - zz
+9 - [aa,dd,00,cc,gg,aa,dd,00,cc] - dd
+8 - [aa,00,cc,gg,aa,dd,00,cc] - dd
+7 - [aa,00,gg,aa,dd,00,cc] - cc
+6 - [aa,00,gg,dd,00,cc] - aa
+5 - [aa,00,gg,dd,cc] - 00
+5 - [aa,00,gg,dd,cc] - (null)
+5 - [aa,00,gg,dd,cc] - (null)
+5 - [aa,00,gg,dd,cc] - (null)
+5 - [aa,00,gg,dd,cc] - (null)
+5 - [aa,00,gg,dd,cc] - (null)
+4 - [00,gg,dd,cc] - aa
+3 - [00,dd,cc] - gg
+2 - [00,dd] - cc
+2 - [00,dd] - (null)
+2 - [00,dd] - (null)
+2 - [00,dd] - (null)
+2 - [00,dd] - (null)
+2 - [00,dd] - (null)
+2 - [00,dd] - (null)
+2 - [00,dd] - (null)
+1 - [dd] - 00
+0 - [] - dd
+0 - [] - (null)
+
+Delete
+
+0 - []
+10 - [aa,bb,dd,ff,00,zz,cc,ee,gg,hh]
+

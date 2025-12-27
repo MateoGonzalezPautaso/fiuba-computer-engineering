@@ -1,0 +1,18 @@
+== Int ==
+
+Clonar
+
+13
+0
+-20
+
+Comparar
+
+intCmp(13,13) --> 0
+intCmp(0,0) --> 0
+intCmp(0,13) --> 1
+intCmp(13,0) --> -1
+intCmp(-20,13) --> 1
+intCmp(0,-20) --> -1
+intCmp(-20,0) --> 1
+

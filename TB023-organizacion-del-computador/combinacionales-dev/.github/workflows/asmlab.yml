@@ -1,0 +1,22 @@
+name: asmlab-action
+
+on:
+  push:
+    branches: 
+      - asmlab
+  pull_request:
+    branches:
+      - asmlab
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: asmlab-test
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3.3.0
+    - name: test
+      id: test
+      uses: orgacomp/actions@asmlab-action
+      with:
+        target: 'test'

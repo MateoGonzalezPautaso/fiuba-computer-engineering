@@ -1,0 +1,3 @@
+       |00| JMP seguir
+seguir |02| SET R0 , 0xFF
+       |04| NEG R0

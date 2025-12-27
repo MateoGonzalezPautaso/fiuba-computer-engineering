@@ -1,0 +1,34 @@
+name: cache-action
+
+on:
+  push:
+    branches: 
+      - cachelab
+  pull_request:
+    branches:
+      - cachelab
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    name: cachelab-test
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3.3.0
+    - name: test
+      id: test
+      uses: orgacomp/actions@cachelab-action
+      with:
+        target: 'runTester'
+
+  memory:
+    runs-on: ubuntu-latest
+    name: cachelab-memory
+    steps:
+    - name: checkout
+      uses: actions/checkout@v3.3.0
+    - name: memory
+      id: memory
+      uses: orgacomp/actions@cachelab-action
+      with:
+        target: 'runValgrind'

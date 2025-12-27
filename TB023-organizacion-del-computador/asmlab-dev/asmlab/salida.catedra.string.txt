@@ -1,0 +1,107 @@
+== String ==
+
+Clonar
+
+7 - Omega 4
+0 - NULL
+
+Comparar
+
+strCmp(Omega 4,Omega 4) --> 0
+strCmp(,) --> 0
+strCmp(Palaven,Omega 4) --> -1
+strCmp(Omega 4,Palaven) --> 1
+strCmp(Feros,Omega 4) --> 1
+strCmp(Palaven,Feros) --> -1
+strCmp(Feros,Palaven) --> 1
+strLen(sar) --> 3
+strCmp(sar,sar) --> 0
+strCmp(sar,23) --> -1
+strCmp(sar,taaa) --> 1
+strCmp(sar,tbb) --> 1
+strCmp(sar,tix) --> 1
+strCmp(sar,taaab) --> 1
+strCmp(sar,taa0) --> 1
+strCmp(sar,tbb) --> 1
+strCmp(sar,) --> -1
+strLen(23) --> 2
+strCmp(23,sar) --> 1
+strCmp(23,23) --> 0
+strCmp(23,taaa) --> 1
+strCmp(23,tbb) --> 1
+strCmp(23,tix) --> 1
+strCmp(23,taaab) --> 1
+strCmp(23,taa0) --> 1
+strCmp(23,tbb) --> 1
+strCmp(23,) --> -1
+strLen(taaa) --> 4
+strCmp(taaa,sar) --> -1
+strCmp(taaa,23) --> -1
+strCmp(taaa,taaa) --> 0
+strCmp(taaa,tbb) --> 1
+strCmp(taaa,tix) --> 1
+strCmp(taaa,taaab) --> 1
+strCmp(taaa,taa0) --> -1
+strCmp(taaa,tbb) --> 1
+strCmp(taaa,) --> -1
+strLen(tbb) --> 3
+strCmp(tbb,sar) --> -1
+strCmp(tbb,23) --> -1
+strCmp(tbb,taaa) --> -1
+strCmp(tbb,tbb) --> 0
+strCmp(tbb,tix) --> 1
+strCmp(tbb,taaab) --> -1
+strCmp(tbb,taa0) --> -1
+strCmp(tbb,tbb) --> 0
+strCmp(tbb,) --> -1
+strLen(tix) --> 3
+strCmp(tix,sar) --> -1
+strCmp(tix,23) --> -1
+strCmp(tix,taaa) --> -1
+strCmp(tix,tbb) --> -1
+strCmp(tix,tix) --> 0
+strCmp(tix,taaab) --> -1
+strCmp(tix,taa0) --> -1
+strCmp(tix,tbb) --> -1
+strCmp(tix,) --> -1
+strLen(taaab) --> 5
+strCmp(taaab,sar) --> -1
+strCmp(taaab,23) --> -1
+strCmp(taaab,taaa) --> -1
+strCmp(taaab,tbb) --> 1
+strCmp(taaab,tix) --> 1
+strCmp(taaab,taaab) --> 0
+strCmp(taaab,taa0) --> -1
+strCmp(taaab,tbb) --> 1
+strCmp(taaab,) --> -1
+strLen(taa0) --> 4
+strCmp(taa0,sar) --> -1
+strCmp(taa0,23) --> -1
+strCmp(taa0,taaa) --> 1
+strCmp(taa0,tbb) --> 1
+strCmp(taa0,tix) --> 1
+strCmp(taa0,taaab) --> 1
+strCmp(taa0,taa0) --> 0
+strCmp(taa0,tbb) --> 1
+strCmp(taa0,) --> -1
+strLen(tbb) --> 3
+strCmp(tbb,sar) --> -1
+strCmp(tbb,23) --> -1
+strCmp(tbb,taaa) --> -1
+strCmp(tbb,tbb) --> 0
+strCmp(tbb,tix) --> 1
+strCmp(tbb,taaab) --> -1
+strCmp(tbb,taa0) --> -1
+strCmp(tbb,tbb) --> 0
+strCmp(tbb,) --> -1
+strLen() --> 0
+strCmp(,sar) --> 1
+strCmp(,23) --> 1
+strCmp(,taaa) --> 1
+strCmp(,tbb) --> 1
+strCmp(,tix) --> 1
+strCmp(,taaab) --> 1
+strCmp(,taa0) --> 1
+strCmp(,tbb) --> 1
+strCmp(,) --> 0
+

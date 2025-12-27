@@ -1,0 +1,7 @@
+2-way, 64 sets, size = 2KB
+loads 65672 stores 34328 total 100000
+rmiss 515 wmiss 179 total 694
+dirty rmiss 158 dirty wmiss 11
+bytes read 11104 bytes written 2704
+read time 132972 write time 53328
+miss rate 0.006940
