@@ -1,0 +1,12 @@
+fail_fast: false
+repos:
+  - repo: https://github.com/ssciwr/clang-format-hook
+    rev: v16.0.2
+    hooks:
+      - id: clang-format
+        args: ["--style=file", "-i"]
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    - id: check-merge-conflict
+    - id: check-added-large-files
