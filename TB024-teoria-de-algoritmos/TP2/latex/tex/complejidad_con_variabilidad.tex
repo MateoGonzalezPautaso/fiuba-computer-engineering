@@ -1,0 +1,54 @@
+\section{Tiempos del algoritmo con distintos valores}
+
+\textbf{Metodología de las pruebas:} Para tener una medición lo más fiel posible, decidimos fijar el valor de cantidad de ejecuciones, por caso, en 10. Con esta cantidad de ejecuciones se realiza un promedio de los tiempos de ejecución. Los generadores de datasets para las pruebas están hechos usando la librería estándar de Python Random.
+
+Para verificar que la complejidad sea efectivamente \textbf{$O(n^2)$} decidimos agregar al gráfico un ajuste contra la función \textbf{$O(n log n)$}, para así poder contrastarlas y estudiar su comportamiento.
+
+Se usó una escala lineal con tamaños para el arreglo de batallas entre [100, 10000], con una cantidad de 25 puntos en el gráfico. Se decidieron usar estos parámetros debido a que aumentar las ejecuciones por caso o el intervalo de tamaños posibles para las listas $x$ y $f$ reflejaba un costo muy grande para computar.
+
+\subsection{Mediciones con los valores de f fijos}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/mediciones_f_fijo_v1.png}
+    \caption{Resultados con $x \in [1, 100000]$ y $f = 100$}
+\end{figure}
+
+\subsection{Mediciones con los valores de x ordenado al revés}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/mediciones_ordenado_reverse_v1.png}
+    \caption{Resultados con $x, f \in [1, 100000]$}
+\end{figure}
+
+\subsection{Mediciones con los valores de x ordenados}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/mediciones_ordenado_v1.png}
+    \caption{Resultados con $x, f \in [1, 100000]$}
+\end{figure}
+
+\subsection{Mediciones con los valores de x aleatorios}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/mediciones_random_v1.png}
+    \caption{Resultados con $x, f \in [1, 100000]$}
+\end{figure}
+
+\subsection{Mediciones con los valores de x fijos}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/mediciones_x_fijo_v1.png}
+    \caption{Resultados con $f \in [1, 100000]$ y  $x = 100$}
+\end{figure}
+
+\subsection{Mediciones con los valores de x y f en un menor rango}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/mediciones_random_small_v1.png}
+    \caption{Resultados con $x, f \in [1, 200]$}
+\end{figure}
+
+\subsection{Conclusión}
+Basándonos en las imágenes presentadas, concluimos que la variabilidad de los valores de $x$ y de $f$ no afecta a los tiempos de nuestro algoritmo debido a que en todos los casos, los gráficos de ajuste quedaron muy parecidos. Además los errores por ajuste se minimizan ajustando para $O(n^2)$ y no se observa un aumento claro del mismo en ninguno de los gráficos presentados. 
+
+Los resultados experimentales muestran que la variación en los valores de entrada ($x$ y $f$) no tiene un impacto significativo en los tiempos de ejecución. Esto se debe a que el algoritmo siempre realiza las mismas operaciones para cada $i$, independientemente de los valores específicos de las listas de entrada, ya que la función $min(x[i - 1], f[(i - t) - 1])$ tiene costo constante.

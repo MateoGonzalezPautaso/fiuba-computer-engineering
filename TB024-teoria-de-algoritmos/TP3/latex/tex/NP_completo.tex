@@ -1,0 +1,176 @@
+\section{Demostración que el Problema de la Tribu del Agua es NP-Completo.}
+
+Para demostrar que el problema enunciado es, en efecto, NP-Completo, debemos reducir un problema NP-Completo a este. Para esta reducción elegimos reducir Partition-Problem a Tribu Del agua, lo que implica resolver Partition-Problem con un algoritmo que resuelva Tribu del Agua
+
+\subsection{Demostración que Partition-Problem es NP-Completo}
+
+Para poder demostrar que Partition-Problem es un problema NP-Completo, vamos a reducir un problema que ya sabemos que esta dentro de esta categoría al mismo. El problema elegido para esto es Subset-Sum
+
+Primero se plantea el problema de decisión de Partition-Problem: Dado un conjunto X de n elementos, ¿Se puede dividir X en dos subconjuntos de igual suma?
+
+\subsubsection{Pertenencia a NP}
+
+A continuación se muestra un validador para la solución que funciona en tiempo polinomial, demostrando que este problema pertenece a NP.
+
+\begin{lstlisting}[language=Python]
+def partition_problem_valido(X, asignaciones):
+    '''
+    X: lista de elementos
+    asignaciones: lista de 0s y 1s del mismo largo que X, donde 1 indica que el elemento va al subconjunto S1 y 0 que va a S2.
+    '''
+    
+    if len(X) != len(asignaciones):
+        return False
+    
+    suma_s1 = 0
+    suma_s2 = 0
+
+    for i in range(asignaciones):
+        asig = asignaciones[i]
+        if asig == 1:
+            suma_s1 += X[i]
+        elif asig == 0:
+            suma_s2 += X[i]
+        else:
+            return False
+
+    return suma_s1 == suma_s2
+\end{lstlisting}
+
+\subsubsection{Reducción de Subset-Sum a Partition-Problem}
+
+Para lograr esta reducción, se debe poder resolver el problema de Subset-Sum usando un algoritmo que pueda resolver Partition-Problem, mediante una cantidad de pasos polinomial en el medio.
+Para lograr esto, vamos a transformar el problema:
+
+Los parámetros que va a recibir Subset-Sum son los siguientes:
+\begin{itemize}
+    \item X: como un conjunto de elementos $\{x_1,x_2, ..., x_n\}$
+    \item t: un número objetivo
+\end{itemize}
+
+Estos parámetros se transformarán en los siguientes para enviárselos al algoritmo que resuelve Partition-Problem:
+\begin{itemize}
+    \item Primero, defino $ \sigma =  \sum_{xi \in X} x_i$
+    \item $X' = X \cup \{2\sigma - t, \sigma+t\}$ = $\{x_1,x_2, ..., x_n, 2\sigma - t, \sigma+t\}$
+    \item La suma de todos los elementos de $X'$ equivale a $4\sigma$
+    \item Siguiente, resuelvo Partition-Problem, pasándole como parámetro a X'
+\end{itemize}
+
+Ahora se demuestra la ida y la vuelta de la reducción
+
+\begin{enumerate}
+    \item \underline{\textbf{Ida: Cuando hay subset-sum hay partition}}
+    \item[] Como hay subset-sum, existe el Subconjunto $S \subseteq X$ cuya suma de elementos es el valor objetivo $t$.\\
+            Por lo tanto, la suma de los elementos fuera de $S$ es $\sigma - t$. \\
+            Ahora considero el subconjunto de $X'$ llamado $A = S \cup \{2\sigma - t\}$. La suma de sus elementos es $t + (2\sigma - t) = 2 \sigma$.\\
+            El complemento de $A$ en $X'$ es $B$ = $(X' - A)$, que es lo mismo que: $B = (X - S) \cup \{\sigma + t\}$. La suma del subconjunto $B$ es lo que sobra de $X$ y el otro término agregado: $(\sigma - t) + (\sigma + t) = 2\sigma$. \\
+            Como $A$ y su complemento $B$ suman lo mismo, el conjunto $X'$ es particionable. Por lo tanto, si existe solución al Subset-Sum, existe solución a Partition-Problem
+    \item \underline{\textbf{Vuelta: Cuando hay partition hay subset-sum}}
+    \item[] $X'$ debería poder particionarse en dos subconjuntos de igual suma $2\sigma$.\\
+            En la subdivisión los elementos $(2\sigma - t)$ y $(\sigma + t)$ no pueden estar en la misma partición, pues su suma equivale a $3\sigma$, que excede la mitad.
+            Por lo tanto, uno esta sumándose a un subconjunto $A$ y otro a un subconjunto $B$.\\
+            Defino los valores: 
+            \begin{itemize}
+                \item $a = \sum_{ai \in A} a_i$
+                \item $b = \sum_{bi \in B} b_i$
+                \item sabiendo que $a + b = \sigma$
+            \end{itemize}
+
+            \begin{align}
+            a + (\sigma + t) = b + (2\sigma - t)\\
+            a - b = \sigma - 2t\\
+            a - (\sigma - a) = \sigma - 2t\\
+            2a - \sigma = \sigma - 2t\\
+            2a = 2\sigma - 2t\\
+            a = \sigma - t
+            \end{align}
+
+            Por lo que $b$ sería lo mismo que $\sigma - t + b = \sigma$ y esto daría como resultado $b = t$, lo que representa que $B$ es el subconjunto solución del problema del Subset-Sum. Concluyendo con esto, la existencia del Partition-Problem también garantiza la existencia del Subset-Sum
+\end{enumerate}
+
+\subsubsection{Conclusión}
+
+Finalmente, habiendo demostrado que Partition-Problem es un problema que está en NP, y habiendo reducido un problema NP-Completo conocido (visto en clase) como Subset-Sum a Partition-Problem, se concluye que este último también es un problema NP-Completo.
+
+\subsection{Reducción de Partition-Problem a Tribu del Agua}
+
+Previamente, se plantearon el verificador en tiempo polinómico y el problema de decisión correspondiente a ambos casos. A continuación, se muestra la reducción: \\
+
+\begin{center}
+\textit{Partition-Problem} $\leq_{\text{p}}$ \textit{Tribu del Agua}
+\end{center}
+
+Para ello, debemos ser capaces de resolver una instancia de \textit{Partition-Problem} utilizando un algoritmo que resuelva \textit{Tribu del Agua}, empleando una cantidad de pasos polinómica.
+
+Los parámetros que recibe \textit{Partition-Problem} son los siguientes:
+\begin{itemize}
+    \item $X = \{x_1,x_2, ..., x_n \}$
+\end{itemize}
+
+Estos deben transformarse de manera adecuada para que el algoritmo de \textit{Tribu del Agua} pueda resolverlo:
+
+\begin{itemize}
+    \item $\tau = \sum_{x_i \in X} x_i$
+    \item $X' = X = \{x_1,x_2, ..., x_n\}$
+    \item $k = 2$
+    \item $B = 2(\frac{1}{2}\tau)^2 = \frac{1}{2}\tau^2$
+\end{itemize}
+
+Ahora se demuestra la ida y la vuelta de la reducción
+
+\begin{enumerate}
+    \item \underline{\textbf{Ida: Cuando hay Partition, hay Tribu}}
+    \item[] Supongamos que hay Partition, entonces existen dos subconjuntos $L \subseteq X$ y $R = X - L$ tal que $\sum_{l_i \in L} l_i = \sum_{r_i \in R} r_i = \frac{1}{2}\tau$.
+    
+    Donde la suma de los cuadrados de ambos subconjuntos es:
+    
+    \begin{center}
+        $(\sum_{l_i \in L} l_i)^2 + (\sum_{r_i \in R} r_i)^2 = (\frac{1}{2}\tau)^2 + (\frac{1}{2}\tau)^2 = 2(\frac{1}{2}\tau)^2 = B$
+    \end{center}
+    
+    Por lo tanto, la instancia de Tribu del Agua se cumple.
+            
+    \item \underline{\textbf{Vuelta: Cuando hay Tribu, hay Partition}}
+    \item[] Supongamos que hay Tribu y admite la partición en dos subgrupos $L$ y $R$ tal que
+
+    \begin{center}
+        $S_L = \sum_{l_i \in L} l_i \qquad S_R = \sum_{r_i \in R} r_i \qquad S_L^2 + S_R^2 \leq B$
+    \end{center}
+
+    y además \(S_L + S_R = \tau\). Si expandimos el cuadrado de la suma
+
+    \begin{center}
+        $(S_L + S_R)^2 = S_L^2 + S_R^2 + 2 S_L S_R = \tau^2$
+    \end{center}
+
+    De ahí se obtiene:
+
+    \begin{center}
+        $S_L^2 + S_R^2 = (S_L + S_R)^2 - 2 S_L S_R = \tau^2 - 2 S_L S_R \leq B$
+    \end{center}
+
+    Luego:
+    
+    \begin{center}
+        $\tau^2 - 2 S_L S_R \leq \frac{1}{2}\tau^2 \longrightarrow - 2 S_L S_R \leq -\frac{1}{2}\tau^2 \longrightarrow S_L S_R \leq \frac{1}{4}\tau^2$
+    \end{center}
+
+    El producto $S_L S_R$ alcanza su máximo $\frac{1}{4}\tau^2$ únicamente cuando $S_L = S_R =  \frac{1}{2}\tau$
+
+    Por lo tanto, la existencia de una solución para \textit{Tribu del Agua} implica la existencia de una partición de sumas iguales para \textit{Partition-Problem}
+    
+\end{enumerate}
+
+\subsubsection{Conclusión}
+
+Hemos mostrado que:
+
+\begin{itemize}
+    \item \textit{Tribu del Agua} tiene un verificador en tiempo polinómico (se demostró previamente), por lo tanto pertenece a NP.
+    \item Existe una reducción en tiempo polinómico \(\textit{Partition-Problem} \le_{\text{p}} \textit{Tribu del Agua}\) cuya corrección quedó probada en ambas direcciones.
+\end{itemize}
+
+Por lo tanto, dado que \textit{Partition-Problem} es NP-Completo y existe una reducción polinómica desde él hacia \textit{Tribu del Agua}, se concluye que \textit{Tribu del Agua} también es NP-Completo.
+
+\newpage
+

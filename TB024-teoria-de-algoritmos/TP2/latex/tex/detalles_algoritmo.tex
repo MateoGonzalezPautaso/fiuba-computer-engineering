@@ -1,0 +1,118 @@
+\section{Detalles del algoritmo}
+
+\subsection{Implementación}
+
+A continuación se encuentra la implementación, en Python, de la solución propuesta en los apartados anteriores. Esta implementación consiste en un algoritmo de Programación Dinámica que busca maximizar la  cantidad de enemigos abatidos según las oleadas provenientes de los mismos y la función acumuladora de poder.
+
+Nuestro algoritmo presenta las características típicas de un enfoque de Programación Dinámica: evalúa de forma iterativa los posibles estados y aplica una lógica de decisión que busca maximizar el valor óptimo acumulado basándose en los óptimos de subproblemas anteriores (un subproblema en este algoritmo se representa con un $n$ más pequeño, es decir, una menor cantidad de minutos) 
+
+En cada iteración, el algoritmo calcula el mejor resultado posible para el minuto actual $i$, considerando todos los minutos previos $t < i$ y determinando cuál maximiza la cantidad total de enemigos abatidos hasta ese punto, de acuerdo con la función acumuladora de poder.
+
+El siguiente fragmento de código, en Python, muestra la función desarrollada, que implementa estos pasos, aplicando la ecuación de recurrencia, y devuelve tanto el valor óptimo final como las decisiones que conducen a él, obtenidas mediante la reconstrucción de la solución.
+
+\begin{lstlisting}[language=Python]
+def maximizar_kills(x, f):
+    n = len(x)
+    if n == 0: return 0
+
+    KILLS = [0] * (n + 1)
+
+    for i in range(1, n + 1):
+        max_kills = -1
+        
+        for t in range(0, i):
+            ataque = KILLS[t] + min(x[i - 1], f[(i - t) - 1])
+
+            if ataque > max_kills:
+                max_kills = ataque
+
+        KILLS[i] = max_kills
+
+    decisiones = reconstruir_solucion(x, f, KILLS)
+    return KILLS[n], decisiones
+\end{lstlisting}
+
+\newpage
+\subsection{Reconstrucción}
+
+Una vez que se tienen los óptimos para cada minuto, se le pasan todos los arreglos (el de los enemigos que arriban en cada minuto, el de la función acumuladora de poder y el que tiene los óptimos para cada minuto) a la función $reconstruir\_solucion$ que se encargará de explicitar los días en los que se decidió atacar y en los que se decidió esperar para acumular poder.
+
+En el siguiente fragmento de código se puede observar dicha función:
+
+
+\begin{lstlisting}[language=Python]
+def reconstruir_solucion(x, f, KILLS):
+    n = len(KILLS)
+    if n == 0: return []
+    
+    decisiones = []     
+
+    i = n - 1
+    anterior = i    # En la iteracion "anterior" siempre se ataca
+    
+    while i > 0:
+
+        if anterior == i:
+            
+            for t in range(i - 1, -1, -1):
+                if KILLS[i] == KILLS[t] + min(x[i - 1], f[(i - t) - 1]):
+                    decisiones.append("Atacar")
+                    anterior = t
+                    break
+        
+        else:
+            decisiones.append("Cargar")
+        
+        i -= 1
+
+    decisiones.reverse()
+    return decisiones
+\end{lstlisting}
+
+La lógica de la reconstrucción parte de que se sabe que en el último día siempre se va a atacar debido a que al ser el último, nunca va a convenir 'Cargar' para intentar asesinar más soldados en el futuro, esto también es válido aunque tenga la menor cantidad de poder acumulada(haber atacado en el anteúltimo minuto). Desde ahí, se recorre el arreglo de óptimos de atrás para adelante utilizando una variable auxiliar llamada $anterior$ que nos dirá la próxima batalla (en la iteración) en la que se debe atacar. En caso de que el índice en $anterior$ no coincida con el de la iteración, significa que en el minuto actual se decidió Cargar. 
+
+Finalmente se utiliza la función $reverse$ (complejidad $O(n)$) para que el arreglo de decisiones quede bien ordenado, debido a que el arreglo de óptimos se recorre al revés.
+
+\subsection{Complejidad}
+
+\subsubsection{Construcción de la solución}
+
+La complejidad del algoritmo está determinada por los dos bucles for que la componen. El bucle externo recorre el rango $[1, n+1)$ (ya que el for es exclusivo), mientras que el interno recorre $[0, i)$, siendo $i$ el valor actual del índice externo. Debido a esto, el total de iteraciones que habremos recorrido es aproximadamente $n *$$\frac{(n + 1)}{2}$ y esto desembocaría en una complejidad de $O(n^2)$.
+\newpage
+
+\begin{quote}
+\textbf{\underline{Mediciones de complejidad para la construcción}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_construccion_v2.png}
+    \caption{Resultados con $f \in [1, 100000]$ y  $x \in [1, 100000]$}
+\end{figure}
+\end{quote}
+
+\subsubsection{Reconstrucción de la solución}
+El algoritmo de reconstrucción va a recorrer el arreglo de óptimos desde el fin hacia el inicio, buscando la decisión por la construcción tomada en cada iteración. Cuando se llega a un minuto en el que se realizó un ataque, se recorre linealmente, desde el fin hasta el inicio, el arreglo hasta encontrar el minuto anterior en el que también se realizó un ataque. Este recorrido para buscar el próximo valor de la variable $anterior$ comienza desde el valor actual de la misma y termina de iterar una vez encontrado el mismo, mediante el uso de $break$. Por lo que en el total de todas las iteraciones del $while$ solo se termina recorriendo 1 vez el arreglo en el bucle interno $for$. 
+
+Esto nos deja con una complejidad en el recorrido del arreglo de la construcción de $O(2n)$, es decir, complejidad $O(n)$.
+
+Luego de iterar el arreglo para verificar las decisiones en cada minuto, se realiza un reverse sobre el arreglo reconstruido. Esta operación tiene una complejidad $O(n)$
+
+En conclusión, la complejidad total de la reconstrucción de la solución es $O(n)$.
+
+\newpage
+
+\begin{quote}
+\textbf{\underline{Mediciones de complejidad para la reconstrucción}}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_reconstruccion_v2.png}
+    \caption{Resultados con $f \in [1, 100000]$ y  $x \in [1, 100000]$}
+\end{figure}
+\end{quote}
+
+
+\subsubsection{Complejidad total}
+Por ende, la complejidad del algoritmo será $O(n^2)$, dado que dentro de la construcción se cuenta con una complejidad $O(n^2)$, que absorbe la complejidad de la reconstrucción, que es $O(n)$.
+
+Todas las imágenes que respectan a las mediciones de tiempo del algoritmo en conjunto están en la sección 5.
+
+\newpage

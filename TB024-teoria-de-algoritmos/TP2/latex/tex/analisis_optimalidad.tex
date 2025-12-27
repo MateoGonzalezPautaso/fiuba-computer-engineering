@@ -1,0 +1,115 @@
+\section{Análisis de optimalidad del algoritmo}
+
+\subsection{Demostración de optimalidad}
+
+La demostración de la optimalidad del algoritmo va a ser realizada mediante el método de inducción. 
+
+\begin{quote}
+\textbf{\underline{Primero se considera el caso base de la inductividad, $i = 1$, es decir el primer minuto.}}
+\end{quote}
+
+Al realizar un ataque en el minuto $i = 1$, sabemos que la única posibilidad para el minuto en que se realizó el último ataque es que no haya habido ninguno, es decir, $t = 0$. Por lo que el número máximo de tropas eliminadas que podemos conseguir se representa como $min(x_1, f(1))$.
+
+Aplicado a la ecuación de recurrencia quedaría de la forma:
+
+\begin{equation}
+    OPT[1] = max(OPT[0] + min(f(1), x_1))  
+\end{equation}
+
+Que es efectivamente, el óptimo en el primer minuto. Cabe aclarar que el valor $OPT[0]$ es un caso base constante con valor 0, esto por la naturaleza de la ecuación de recurrencia.
+
+\begin{quote}
+\textbf{\underline{Paso inductivo, ataque en el minuto $i$.}}
+\end{quote}
+
+Supongamos que para todo minuto $t$ anterior al actual $t < i$, es cierto que el valor $OPT[t]$ es efectivamente el valor máximo de tropas eliminadas que se pueden alcanzar para ese minuto $t$ en concreto habiendo atacado en $t$.
+
+La ecuación de recurrencia va a buscar el valor máximo entre el óptimo de cada minuto $t$ agregándole la cantidad de bajas que se pueden realizar en el minuto $i$ con el poder que se viene acumulando desde el minuto $t$. Es decir, va a tomar la forma:
+
+\begin{equation}
+    (mejor \ posible\ hasta\  t\ con\  último\ ataque\ en\  t)+min(x_i,\ f(i \ -\ t))    
+\end{equation}
+
+Por la hipótesis inductiva, sabemos que el primer término es $OPT[t]$, desde ahí, se observa que todo valor alcanzable con el último ataque en el minuto $t$ se encuentra acotado 
+
+\begin{equation}
+    OPT[t] <= OPT[t] + min(x_i,\ f(i \ -\ t))  
+\end{equation}
+
+Recorriendo todos los minutos $t$, sabemos que ninguna estrategia en $i$ puede superar a:
+
+\begin{equation}
+    max(\ OPT[t] + min(x_i,\ f(i \ -\ t)) \ )\ \forall \ t<i 
+\end{equation}
+
+Que es exactamente la ecuación presente en la ecuación de recurrencia aplicada en el algoritmo, ya que esa es la definición de $OPT[i]$. Se puede concluir que $OPT[i]$ es el valor máximo de tropas eliminadas que se puede conseguir en el minuto $i$ habiendo atacado en $i$, seleccionando como ataque anterior al minuto $t$ que maximiza la expresión.
+
+\begin{quote}
+\textbf{\underline{Conclusión de la inducción.}}
+\end{quote}
+
+Sabiendo que el paso inductivo funciona desde la hipótesis de que todos los minutos anteriores al actual cuentan con su valor óptimo calculado y que los casos base de $i=0$ y $i=1$ son siempre óptimos, el paso inductivo se traslada a $i = 2$, cumpliendo la optimalidad en ese minuto, luego hasta $i = 3$ y siguiendo la cadena hasta llegar al minuto final $i = n$.
+
+Por lo tanto, el algoritmo es óptimo y calcula la máxima cantidad de bajas posibles hasta el minuto $n$ proporcionado.
+
+\subsection{Corroboración por backtracking}
+Utilizamos un algoritmo que cumple lo pedido por el enunciado utilizando Backtracking para comparar nuestros resultados con los del implementado mediante programación dinámica.
+
+El algoritmo de backtracking implementado es el siguiente:
+
+\begin{lstlisting}[language=Python]
+def _maximizar_kills_bt(x, f, n, i, ult_atq, mejor_estado):
+    if i > n: 
+        return 0    # kills de aca en adelante
+
+    key = (i, ult_atq)
+    if key in mejor_estado:
+        return mejor_estado[key]    # Ya esta calculado el maximo para este estado
+
+    # Rama 1: no ataco y sigo cargando
+    no_ataco_ahora = _maximizar_kills_bt(x, f, n, i + 1, ult_atq, mejor_estado)
+
+    # Rama 2: ataco en este minuto
+    j = i - ult_atq
+    kills_i = min(x[i - 1], f[j - 1])
+    ataco_ahora = kills_i + _maximizar_kills_bt(x, f, n, i + 1, i, mejor_estado)
+
+    max_kills = max(no_ataco_ahora, ataco_ahora)
+    mejor_estado[key] = max_kills
+    return max_kills
+
+def maximizar_kills_bt(x, f):
+    n = len(x)
+    mejor_estado = {}
+    return _maximizar_kills_bt(x, f, n, 1, 0, mejor_estado)
+\end{lstlisting}
+
+Dada la naturaleza del problema, al usar el algoritmo por backtracking sin ninguna optimización, resultaba en unos tiempos de ejecución muy grandes. Para evitar esto, se usa un diccionario que va a ir memorizando la mejor cantidad de kills que se pueden obtener dado un momento específico (formado por el minuto actual y el minuto del último ataque). 
+Al tener memorizada la mayor cantidad de kills que se pueden obtener en cierto estado, no hace falta recalcularlo en algunas de las ramas de recursión, lo que mejora sustancialmente los tiempos de ejecución.
+
+Se compararon las salidas de los archivos provistos por la cátedra, una por backtracking y otra por programación dinámica, observando los siguientes resultados:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\hline
+\textbf{Archivo} & \textbf{Programación Dinámica} & \textbf{Backtracking} \\ \hline
+5.txt & 1413 & 1413 \\
+10.txt & 2118 & 2118 \\
+10\_bis.txt & 1237 & 1237 \\
+20.txt & 11603 & 11603 \\
+50.txt & 3994 & 3994 \\
+100.txt & 7492 & 7492 \\
+200.txt & 4230 & 4230 \\
+500.txt & 15842 & 15842 \\
+1000.txt & 4508 & 4508 \\
+5000.txt & 504220 & 504220 \\ \hline
+\end{tabular}
+\caption{Comparación entre Programación Dinámica y Backtracking}
+\end{table}
+
+\begin{quote}
+\textbf{Nota sobre las ejecuciones:}
+El tiempo de ejecución del algoritmo para $1000.txt$ es de aproximadamente 5 minutos y para el archivo $5000.txt$ es de aproximadamente 25 minutos. Ademas para poder ejecutar estos archivos hay que modificar el depth recursion limit, pues superan el que viene por defecto en Python. 
+\end{quote}
+\newpage

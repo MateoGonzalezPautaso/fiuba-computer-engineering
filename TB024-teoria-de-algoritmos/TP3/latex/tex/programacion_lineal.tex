@@ -1,0 +1,200 @@
+\section{Algoritmo Programación Lineal}
+
+\subsection{Implementación}
+
+Se propone un algoritmo que utiliza programación lineal para resolver aproximadamente el problema en el que se basa este trabajo práctico:
+
+\begin{lstlisting}[language=Python]
+def tribu_del_agua_pl(maestros_agua, k):
+    maestros_agua = sorted(maestros_agua, key=lambda x: x[1], reverse=True)
+    n = len(maestros_agua)
+
+    nombres = {j: maestros_agua[j-1][0] for j in range(1, n+1)}
+    fuerzas = {j: maestros_agua[j-1][1] for j in range(1, n+1)}
+
+    prob = LpProblem("tribu_del_agua", LpMinimize)
+
+    A = LpVariable.dicts("A",
+                         (range(1, k+1), range(1, n+1)),
+                         cat=LpBinary)
+
+    Z = LpVariable("Z", lowBound=0)
+    Y = LpVariable("Y", lowBound=0)
+
+    prob += Z - Y
+
+    for j in range(1, n+1):
+        prob += lpSum(A[i][j] for i in range(1, k+1)) == 1
+
+    S = {
+        i: lpSum(A[i][j] * fuerzas[j] for j in range(1, n+1))
+        for i in range(1, k+1)
+    }
+
+    for i in range(1, k+1):
+        prob += Z >= S[i]
+        prob += Y <= S[i]
+
+    top_k = min(k, n)
+    for idx in range(1, top_k+1):
+        prob += A[idx][idx] == 1
+
+    prob.solve(PULP_CBC_CMD(msg=0))
+    return reconstruir(k, S, nombres, fuerzas, A)
+
+def reconstruir(k, S, nombres, fuerzas, A):
+    asign = [[] for _ in range(k)]
+    suma_cuad = 0
+
+    for i in range(1, k+1):
+        si = value(S[i])
+        suma_cuad += si * si
+        for j in range(1, len(nombres)+1):
+            if value(A[i][j]) > 0.5:
+                asign[i-1].append((nombres[j], fuerzas[j]))
+
+    return asign, int(suma_cuad)
+
+\end{lstlisting}
+
+\subsection{Modelo de Programación Lineal}
+
+\textbf{Parámetros}
+
+\[
+f_j = \text{fuerza del maestro } j
+\]
+
+\textbf{Variables}
+
+\[
+A_{ij} =
+\begin{cases}
+1, & \text{si el maestro } j \text{ pertenece al grupo } i,\\
+0, & \text{en caso contrario}
+\end{cases}
+\qquad \text{(variable binaria)}
+\]
+
+\[
+Z = \text{máximo entre las sumas de fuerzas de los grupos}
+\]
+
+\[
+Y = \text{mínimo entre las sumas de fuerzas de los grupos}
+\]
+
+\[
+S_i = \sum_{j=1}^{n} A_{ij} \, f_j
+\qquad \text{(suma de fuerzas del grupo } i\text{)}
+\]
+
+\textbf{Función objetivo}
+
+\[
+\min \; Z - Y
+\]
+
+\textbf{Restricciones}
+
+\begin{itemize}
+    \item \textbf{Asignación exacta: cada maestro debe pertenecer a un único grupo}
+    \[
+    \sum_{i=1}^{k} A_{ij} = 1
+    \qquad \forall j
+    \]
+
+    \item \textbf{Cotas inferiores}
+    \[
+    Z \ge 0, \qquad Y \ge 0
+    \]
+
+    \item \textbf{Definición de suma máxima}
+    \[
+    Z \ge S_i
+    \qquad \forall i
+    \]
+
+    \item \textbf{Definición de suma mínima}
+    \[
+    Y \le S_i
+    \qquad \forall i
+    \]
+\end{itemize}
+
+\subsection{Detalles del algoritmo}
+\begin{itemize}
+    \item Se ordenan los maestros de mayor a menor fuerza para optimizar los tiempos de ejecución del algoritmo(acelera las podas del árbol en Branch and Bounds)
+    \item A la hora de crear ciertas variables se utiliza $lowBound = 0$ debido a que esto nos evita poner la restricción de que dichas variables deben ser >= 0
+    \item Se resuelve el problema con el solver CBC forzando que no se muestre ningún mensaje por pantalla con msg = 0
+    \item Con \lstinline|LpVariable.dicts| se crean variables de decisión a la vez, guardadas en un diccionario indexado.
+    \item Con el siguiente fragmento de código, se coloca a los min(k, n) maestros más fuertes en grupos distintos. Aunque esto puede empeorar la cota de aproximación o la optimalidad del algoritmo, mejora enormemente sus tiempos de ejecución. Por esto que mencionamos decidimos utilizarlo    
+    
+            \begin{lstlisting}[language=Python]
+                top_k = min(k, n)
+                for idx in range(1, top_k+1):
+                    prob += A[idx][idx] == 1
+            \end{lstlisting}
+
+\end{itemize}
+
+\subsection{Cota de aproximación empírica}
+
+Para encontrar la cota de aproximación empírica de este modelo de Programación Lineal (que optimiza el rango), se van a ejecutar todos los datasets provistos por la cátedra y se analizará la diferencia entre el óptimo y el resultado conocido.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/mediciones_pl_catedra.png}
+    \caption{Resultados de $r(I)$ para datasets de la cátedra}
+\end{figure}
+
+Cómo se puede apreciar en la imagen, la diferencia entre el resultado óptimo y el resultado que logra aproximar la implementación mostrada en programación lineal es mínima, logrando valores para $r(I)$ menores a 1.0025 en todos los casos. Concluyendo así que el aproximador por programación lineal consigue muy buenas aproximaciones.
+
+\subsection{Mediciones de tiempo y comparación con backtracking}
+
+Las mediciones de tiempo se realizarán comparando los tiempos del algoritmo implementado por programación lineal con el que fue realizado utilizando Backtracking. Esto se verá reflejado en un gráfico de barras donde se podrán observar los tiempos de estos algoritmos.
+
+\subsubsection{Ajuste a la función exponencial}
+
+A continuación se muestra el gráfico de ajuste a la función exponencial para demostrar que el algoritmo de programación lineal con variables enteras mostrado en este apartado es efectivamente de complejidad exponencial
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/ajuste_ple.png}
+        \caption{Gráfico de ajuste de programación lineal}
+    \end{figure}
+
+
+
+\subsubsection{Comparación contra backtracking}
+     Para estudiar la diferencia de los tiempos de ejecución entre este algoritmo y el implementado con backtracking, se realizaron gráficos de barras donde se modela los diferentes tiempos que tardó cada algoritmo en algunos de los datasets relevantes provistos por la cátedra
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/ple_vs_bt_8_3.png}
+        \caption{Comparación Programación Lineal vs Backtracking en $8\_3.txt$}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/ple_vs_bt_15_6.png}
+        \caption{Comparación Programación Lineal vs Backtracking en $15\_6.txt$}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/ple_vs_bt_18_6.png}
+        \caption{Comparación Programación Lineal vs Backtracking en $18\_6.txt$}
+    \end{figure}
+
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/ple_vs_bt_20_8.png}
+        \caption{Comparación Programación Lineal vs Backtracking en $20\_8.txt$}
+    \end{figure}
+
+Como se puede observar, es muy clara la diferencia en tiempos de ejecución entre ambos algoritmos. Mediante los datasets provistos por la cátedra, donde Backtracking no tarda mas de 1 segundo, Programación Lineal se dispara a 100 veces más. Es muy evidente 
+
+
+\newpage

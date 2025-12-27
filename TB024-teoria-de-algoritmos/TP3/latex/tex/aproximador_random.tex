@@ -1,0 +1,151 @@
+\section{Aproximador randomizado}
+
+Para la implementación de otro aproximador además del aproximador de Pakku descrito en el punto anterior, optamos por hacer un aproximador randomizado basado en la técnica de 'Simulated Annealing', que se inspira en la técnica física del recocido como tratamiento térmico en metales. Elegimos este aproximador por el interés que nos generó su funcionamiento y su naturaleza aleatoria.
+
+\subsection{¿Cómo funciona?}
+
+El aproximador cuenta con tres constantes principales sobre las que basa su funcionamiento:
+\begin{itemize}
+    \item \textbf{Temperatura inicial}
+    \item \textbf{Temperatura final}
+    \item \textbf{Tasa de enfriamiento}
+\end{itemize}
+
+Este algoritmo va a partir desde la aproximación que calcula el aproximador de Pakku, desde esta aproximación va a hacer cambios aleatorios en sobre las asignaciones de los maestros en cada grupo. Elige un grupo aleatorio que no este vacío, dentro de ese grupo elige un maestro aleatorio y luego lo envía a otro grupo también elegido al azar.
+
+Al hacer los cambios pueden darse dos situaciones diferentes: 
+
+\begin{itemize}
+    \item[]\textbf{Caso 1:} el cambio aleatorio mejoró la solución aproximada que había calculado el algoritmo de Pakku, asi que se toma la decisión de guardar ese cambio.
+    
+    \item[]\textbf{Caso 2:} el haber cambiado al maestro seleccionado de grupo causó que empeore la solución, sin embargo puede darse la situación donde una mala decisión a corto plazo pueda resultar en alcanzar una mejor solución a medida que se siguen realizando cambios. Por esto, simulated annealing va a decidir si tomar los cambios que empeoran la solución con la esperanza de que al hacerlos pueda alcanzar una mejor al largo plazo. 
+    
+    La decisión ligada a una probabilidad, que depende tanto de la temperatura actual como de que tan malo es el cambio. Cuando la temperatura es alta, el algoritmo mantiene probabilidades altas de tomar los cambios malos sin tener tanto en cuenta la calidad del mismo, pero a medida que baja la temperatura, la probabilidad de tomar cambios que provocaron un empeoramiento significativo en la solución decrece significativamente.
+\end{itemize}
+
+El código sobre el que esta implementado el algoritmo es el siguiente:
+
+\begin{lstlisting}[language=Python]
+def simulated_annealing(maestros_agua, k):
+    mejor_sol, adic_mejor = aproximador_pakku(maestros_agua, k)
+    
+    sol_actual = [list(g) for g in mejor_sol]
+    adic_actual = adic_mejor
+    suma_grupos_actual = calcular_suma_grupos(sol_actual, k)
+    
+    t_actual = T_INICIAL
+
+    while t_actual >= T_FINAL:
+        g1 = elegir_random_grupo_no_vacio(sol_actual)
+        
+        idx = random.randrange(len(sol_actual[g1]))
+        maestro = sol_actual[g1][idx]
+        nombre, poder = maestro
+
+        g2 = random.randrange(k)
+        while g1 == g2:
+            g2 = random.randrange(k)
+
+        suma_g1_vieja = suma_grupos_actual[g1]
+        suma_g2_vieja = suma_grupos_actual[g2]
+
+        suma_g1_nueva = suma_g1_vieja - poder
+        suma_g2_nueva = suma_g2_vieja + poder
+
+        adic_nuevo = adic_actual - (suma_g1_vieja**2 + suma_g2_vieja**2) + (suma_g1_nueva**2 + suma_g2_nueva**2)
+        delta_adic = adic_nuevo - adic_actual
+
+        if acepta_cambio(delta_adic, t_actual):
+            adic_actual = adic_nuevo
+            suma_grupos_actual[g1] = suma_g1_nueva
+            suma_grupos_actual[g2] = suma_g2_nueva
+
+            sol_actual[g1].pop(idx)
+            sol_actual[g2].append(maestro)
+
+            if adic_actual < adic_mejor:
+                adic_mejor = adic_actual
+                mejor_sol = [list(g) for g in sol_actual]
+
+        t_actual *= TASA_ENFRIAMIENTO
+
+    return mejor_sol, adic_mejor
+\end{lstlisting}
+
+Como se puede observar, al final de cada iteración del bucle \lstinline|while|, la temperatura decrece multiplicándola por una \lstinline|TASA_ENFRIAMIENTO| (en nuestro algoritmo usamos 0.995, un valor positivo cercano a 1).
+
+La toma de decisiones está encapsulada en la función \lstinline|acepta_cambio|:
+
+\begin{lstlisting}[language=Python]
+def acepta_cambio(delta_adic, t_actual):
+    if delta_adic < 0:
+        return True
+    else:
+        p = math.exp(-delta_adic / t_actual)
+        if random.random() < p:
+            return True
+    return False
+\end{lstlisting}
+
+Si el delta es un valor negativo, el cambio aleatorio terminó mejorando la solución, por lo que la acepta siempre. Lo interesante se ve cuando el cambio no reflejó un cambio positivo en el coeficiente, en cuyo caso calcula la probabilidad de aceptarlo usando la distribución probabilística de Boltzmann con los parámetros \lstinline|delta_adic| y \lstinline|t_actual|, donde se puede ver su comportamiento:
+
+\begin{enumerate}
+    \item Temperaturas altas permiten cambios no tan buenos
+    \item Las temperaturas bajas disminuyen mucho la probabilidad para los cambios que empeoraron mucho la solución
+\end{enumerate}
+
+\subsection{Comparación contra el aproximador de Pakku}
+
+Como este aproximador ya parte de la solución que encontró el aproximador de Pakku, y a partir de esta busca mejorarla, es imposible que el resultado de la aproximación sea peor que el calculado por el algoritmo de Pakku.
+La única posibilidad es que, dependiendo de los números aleatorios generados, sea la misma aproximación o que sea mejor. A continuación se muestra un gráfico donde se comparan los resultados de la cota de aproximación para Pakku (violeta) y Simulated Annealing (Verde), donde efectivamente se observa que es igual o mejor.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/pakku_vs_sa.png}
+    \caption{Resultados de $r(I)$ para datasets muy grandes}
+\end{figure}
+
+En el gráfico anterior se puede dimensionar que si bien en algunas ejecuciones logra mejorar la solución proporcionada por el aproximador de Pakku, no lo hace en un porcentaje muy grande. Por lo que a modo de prueba, también medimos la diferencia de los algoritmos pero con un cambio, ahora el aproximador Greedy de Pakku no ordena a los maestros por poder decreciente y Simulated Annealing también comenzará a hacer cambios aleatorios desde el resultado del algoritmo de Pakku alterado.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/pakku_mod_vs_sa.png}
+    \caption{Resultados de $r(I)$ para datasets muy grandes con Pakku modificado}
+\end{figure}
+
+En ese gráfico si se puede notar que como el aproximador de Pakku alterado no alcanza una solución de buena calidad, es mucho mas fácil para simulated annealing lograr mejorarla en un porcentaje mas notable.
+
+\subsection{Complejidad del algoritmo}
+
+La complejidad de la implementación de simulated annealing mostrada en este informe está dada por sus principales instrucciones:
+
+\begin{enumerate}
+    \item Obtener la solución del aproximador de Pakku. Como se mostró en la sección 5 del informe, esto puede aportar una complejidad de $O(n^2)$ en el peor de los casos.
+    \item Hacer una copia del arreglo de asignaciones aporta una complejidad $O(n + k)$
+    \item Calcular la suma de los grupos en la asignación devuelta por el aproximador de Pakku aporta $O(n + k)$
+    \item Lo siguiente es el análisis de la complejidad del bucle \lstinline|while|, cuya cantidad de iteraciones es una constante definida por valores constantes en el algoritmo. La cantidad de iteraciones totales, definida como $I$, de este bucle se calcula de la siguiente manera:
+
+    Para simplificar las siguientes ecuaciones se define $\alpha$ como la tasa de enfriamiento
+        
+        \begin{align}
+            TINICIAL \cdot (\alpha)^I \approx TFINAL
+        \end{align}
+
+        Por lo tanto, despejando $I$, se obtiene la siguiente cantidad de iteraciones:
+
+        \begin{align}
+            I \thickapprox \frac{\log(\frac{T_{FINAL}}{T_{INICIAL}})}{\log(\alpha)}
+        \end{align}
+
+        Es decir, la cantidad de iteraciones del bucle no depende de los valores de entrada del programa $k$ o $n$, por lo tanto puede considerarse como que es una cantidad de iteraciones constante.
+
+        Dentro del bucle se realizan varias operaciones de complejidad $O(n)$ o $O(n + k)$.
+\end{enumerate}
+
+Por lo tanto, la complejidad del algoritmo de simulated annealing esta marcada principalmente por el llamado al aproximador de Pakku, por lo que su complejidad teórica es $O(n^2)$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_sa.png}
+    \caption{Mediciones y ajuste de simulated annealing}
+\end{figure}

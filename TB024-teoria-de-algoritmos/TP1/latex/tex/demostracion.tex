@@ -1,0 +1,92 @@
+\section{Demostración de optimalidad del algoritmo}
+
+A continuación, se demostrará que seleccionar el orden de las batallas por el cociente $t_i/b_i$ de forma creciente produce una solución óptima para minimizar la sumatoria ponderada:
+    \begin{equation*}
+        \sum_{i=1}^{n} b_i F_i
+    \end{equation*}
+
+\subsection{Definición de inversión}
+
+\paragraph{Definición.}
+Decimos que una solución tiene una \emph{inversión} si existen dos posiciones contiguas $i$ y $j$, donde $i < j$ y, a su vez,
+\[
+\frac{t_i}{b_i} > \frac{t_j}{b_j}.
+\]
+
+
+\subsection{Planteo: existe un orden de batallas sin inversiones que es óptimo}
+
+\paragraph{Demostración.}
+Supongamos que hay un orden de batallas óptimo que sí tiene inversiones. Como las tiene, debería poder intercambiar siempre de a pares las batallas inversibles y contiguas. Luego de una cantidad de inversiones, se debería llegar a un orden sin inversiones que acumule el mismo coeficiente de impacto.\\
+    A continuación se demuestra matemáticamente que hacer estas inversiones no puede empeorar la solución óptima. Es decir, realizar una inversión entre dos batallas no aumenta la sumatoria ponderada.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{img/inversiones.png}
+\end{figure}
+
+Analizando cómo afecta la inversión en el coeficiente de impacto $C_i$:
+
+\begin{quote}
+    Sumatoria antes de la inversión ($K$ representa la sumatoria de las batallas luchadas hasta el momento y $F$ la felicidad acumulada hasta la primera batalla presente en la inversión): 
+    \[ C_i= K + b_i \cdot (F + t_i) + b_j \cdot (F + t_i + t_j) \]
+    
+    
+    Luego de hacer la inversión la sumatoria se representa con:
+
+    \[ C_i'= K + b_j \cdot (F + t_j) + b_i \cdot (F + t_j + t_i) \]
+    
+    Se desarrollan ambas ecuaciones:
+    \begin{align*}
+        C_i = K + b_i \cdot F + b_i \cdot t_i + b_j \cdot F + b_j \cdot t_i + b_j \cdot t_j\\[4pt]
+        C_i' = K + b_j \cdot F + b_j \cdot t_j + b_i \cdot F + b_i \cdot t_j + b_i \cdot t_i
+    \end{align*}\
+    
+    Observando los términos de cada una, se visualiza que hay un único termino diferente entre ellas:
+
+    \begin{align*}
+        Término \ C_i \xrightarrow{} b_j \cdot t_i\\[4pt]
+        Término \ C_i' \xrightarrow{} b_i \cdot t_j
+    \end{align*}\
+
+    Recordando que $\frac{t_i}{b_i} > \frac{t_j}{b_j}$ y que por ende ${t_i} \cdot {b_j} > {t_j} \cdot {b_i}$, se concluye que haber hecho una inversión no pudo haber empeorado la solución, es decir, provocar un aumento en el resultado final de la sumatoria.
+    Esto demuestra que existe un orden de batallas óptimo sin inversiones.
+\end{quote}
+
+\subsection{Planteo: todos los órdenes de batallas sin inversiones son igual de óptimos}
+
+
+\paragraph{Demostración.}
+Las diferencias entre todos los órdenes de batallas que son óptimos solo pueden darse entre batallas contiguas que satisfacen \(\dfrac{t_i}{b_i}=\dfrac{t_j}{b_j}\)
+
+Por este motivo, basta con probar que intercambiar el orden de esas batallas no altera el coeficiente de impacto final.
+
+En un ejemplo con un intercambio entre dos batallas $i$, $j$, donde \(\dfrac{t_i}{b_i}=\dfrac{t_j}{b_j}\):
+
+Sea $T$ el tiempo acumulado antes de estas dos tareas; las contribuciones a la sumatoria en cada orden toma la forma:
+\[
+\begin{aligned}
+C_{i\to j} &= b_i(T+t_i) + b_j(T+t_i+t_j),\\
+C_{j\to i} &= b_j(T+t_j) + b_p(T+t_j+t_i).
+\end{aligned}
+\]
+
+Se aplica la distributiva para analizar cada término en cada una de las soluciones: 
+
+\[
+\begin{aligned}
+C_{i\to j} &= b_i T + b_i t_i + b_j T + b_j t_i + b_j t_j, \\[6pt]
+C_{j\to i} &= b_j T + b_j t_j + b_i T + b_i t_j + b_i t_i.
+\end{aligned}
+\]
+
+Si $\dfrac{t_i}{b_i}=\dfrac{t_j}{b_j}$ entonces $b_j t_i = b_i t_j$, por lo que ambas soluciones son igual de óptimas.
+
+Finalmente, cualquier permutación entre batallas contiguas y con el mismo cociente \(\dfrac{t}{b}\) no altera el resultado final. Entonces, todas las soluciones sin inversiones son igual de óptimas.
+
+
+\subsection{Conclusión de la demostración}
+
+Como hay un orden de batallas sin inversiones que es óptimo y, además, todos los órdenes de batallas sin inversiones generan el mismo coeficiente de impacto (demostrado en \textbf{2.1} y \textbf{2.2}). Concluimos que este algoritmo es óptimo debido a que logra encontrar un orden de batallas sin inversiones.
+
+\newpage

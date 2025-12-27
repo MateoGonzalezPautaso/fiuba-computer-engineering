@@ -1,0 +1,125 @@
+\section{Anexo de correciones}
+
+\subsection{¿Cómo se puede garantizar que mediante alguna cantidad de inversiones se puede llegar a una solución sin inversiones?}
+Podemos garantizar que esto ocurre debido a que sólo vamos a hacer las inversiones que no cumplan el orden que plantea nuestro algoritmo. Es decir, vamos a invertir dos batallas si y sólo si no se cumple que:
+
+\(\dfrac{t_i}{b_i} > \dfrac{t_{i+1}}{b_{i+1}}\)
+
+Además, cada inversión de un par contiguo reduce en una unidad el número total de inversiones en la secuencia. Definimos inv(S) como la cantidad de pares (i, i + 1) con \(\dfrac{t_i}{bi} > \dfrac{t{i+1}}{b_{i+1}}\)
+
+Cada vez que se invierte un par contiguo, el número total de inversiones en la secuencia disminuye exactamente en una unidad. En efecto, al intercambiar las posiciones de los elementos i e i + 1, no se generan nuevas inversiones, ya que el orden del resto de los elementos permanece inalterado. Por lo tanto, se cumple que inv(S')(nueva cantidad de inversiones) = inv(S) - 1
+
+\subsection{Correcciones de constantes}
+Analizando cómo afecta la inversión en el coeficiente de impacto $C_i$:
+
+\begin{quote}
+    Sumatoria antes de la inversión ($K1$ representa la sumatoria de las batallas luchadas hasta el momento, $F$ la felicidad acumulada hasta la primera batalla presente en la inversión y $K2$ representa la sumatoria de las batallas luchadas luego de la i y la j): 
+    \[ C_i= K1 + b_i \cdot (F + t_i) + b_j \cdot (F + t_i + t_j) + K2 \]
+    
+    
+    Luego de hacer la inversión la sumatoria se representa con:
+
+    \[ C_i'= K1 + b_j \cdot (F + t_j) + b_i \cdot (F + t_j + t_i) + K2\]
+    
+    Se desarrollan ambas ecuaciones:
+    \begin{align*}
+        C_i = K1 + b_i \cdot F + b_i \cdot t_i + b_j \cdot F + b_j \cdot t_i + b_j \cdot t_j + K2\\[4pt]
+        C_i' = K1 + b_j \cdot F + b_j \cdot t_j + b_i \cdot F + b_i \cdot t_j + b_i \cdot t_i + K2
+    \end{align*}\
+    
+    Observando los términos de cada una, se visualiza que hay un único término diferente entre ellas:
+
+    \begin{align*}
+        Término \ C_i \xrightarrow{} b_j \cdot t_i\\[4pt]
+        Término \ C_i' \xrightarrow{} b_i \cdot t_j
+    \end{align*}\
+\end{quote}
+
+\textbf{Nota:} La demostración sigue siendo la misma, pero en este caso se tiene en cuenta la sumatoria posterior a las dos batallas de la inversión. De todas maneras, aún considerando este término, la conclusión de la demostración se mantiene igual.
+
+\subsection{Aclaración sobre la regla Greedy}
+
+Como fue descrito en el punto 3 del informe, la regla Greedy del algoritmo consiste en seleccionar la batalla aún no luchada que tenga el menor coeficiente $\tfrac{t_i}{b_i}$. Sin embargo, aunque se consiga la solución óptima, el seleccionar esa batalla no necesariamente garantiza que sea la que sume el menor valor al coeficiente de impacto en esa iteración.
+
+El ordenamiento del arreglo en base a los coeficientes $\tfrac{t_i}{b_i}$ es válido debido a que los valores de los coeficientes no se ven modificados en ninguno de los estados actuales presentes en cada iteración del algoritmo.
+
+\subsection{Comentario sobre el apartado de Ejemplos de ejecución}
+
+Consideramos que las verificaciones realizadas eran suficientes dado a la demostración de optimalidad del algoritmo Greedy desarrollado. Para cualquier instancia del problema, siempre encuentra una solución óptima.
+
+\subsection{Profundización en análisis de variabilidad}
+
+\textbf{Metodología de las pruebas:} Para disminuir el ruido en las mediciones, decidimos aumentar la cantidad de ejecuciones por caso, de 10 a 50 veces. Con esta cantidad de ejecuciones se realiza un promedio de los tiempos de ejecución.
+Los generadores de datasets para las pruebas están hechos usando la librería estándar de Python Random. 
+Para verificar que la complejidad sea efectivamente \textbf{$O(n log n)$} decidimos agregar al gráfico un ajuste contra la función lineal \textbf{$O(n)$}, para así poder contrastarlas y estudiar su comportamiento.
+
+Se usó una escala lineal con tamaños para el arreglo de batallas entre [100, 100000]. Con una cantidad de 50 puntos en el gráfico. Se decidieron usar estos parámetros debido a que aumentar las ejecuciones por caso o el intervalo de tamaños de batallas reflejaba un costo muy grande para computar.
+
+\subsubsection{Medición general}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion1_v2.png}
+    \caption{Resultados con $t_i$, $b_i$ \in [1, 100000]}
+\end{figure}
+En esta nueva medición se ve una reducción significativa del ruido en cada punto, esto debido al aumento de corridas por caso de ejecución.
+
+Debido a la escala del gráfico no puede apreciarse tanto la diferencia entre ambas complejidades, pero observando el gráfico de error por ajuste, se distingue que el ajuste $O(n log n)$ muestra un error menor a lo largo de todos los puntos. Para lograr un gráfico donde los ajustes se vean mas separados habría que aumentar el tamaño del arreglo (eje x) a un número mucho mayor.
+
+
+
+\subsubsection{Medición con un dataset ordenado}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_ordenado_v2.png}
+    \caption{Resultados con $t_i$, $b_i$ \in [1, 100000]}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/medicion_error_ordenado_v2.png}
+    \caption{Zoom en el gráfico de error}
+\end{figure}
+En estas mediciones, el dataset se encontraba ordenado por $T_i / B_i$ de manera ascendiente, esto se realizo para corroborar que la función sort de Python esta optimizada para arreglos ya ordenados. 
+En el gráfico de ajustes se puede ver que el comportamiento del algoritmo es muy similar a $O(n)$, y se ve de forma mas sencilla en la segunda imagen, donde los errores por ajuste no estan muy distanciados el uno del otro.
+Esto nos deja con una complejidad muy cercana a $O(n)$, sin embargo, aún se mantiene con $O(n log n)$.
+
+
+\subsubsection{Medición con un dataset ordenado al revés}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_ordenado_reverse_v2.png}
+    \caption{Resultados con $t_i$, $b_i$ \in [1, 100000]}
+\end{figure}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.5\textwidth]{img/medicion_error_ordenado_reverse_v2.png}
+    \caption{Zoom en el gráfico de error}
+\end{figure}
+En este caso, el dataset con los arreglos de batallas se encuentra ordenado de forma inversa, es decir, $T_i/B_i$ descendente.
+Se observa un caso muy similar al test con el dataset ordenado, esto porque la implementación de \textit{sort} en Python cuenta también con una optimización para los arreglos ordenados de forma inversa. Esto nos deja con un tiempo de ejecución más cercano al lineal y un error por ajuste muy similar al mismo.
+
+\subsubsection{Mediciones con valor fijo en una variable}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_ti_fijo_v2.png}
+    \caption{Resultados con $t_i = 100$ fijo y $b_i$ \in [1, 100000]}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_bi_fijo_v2.png}
+    \caption{Resultados con $b_i = 100$ fijo y $t_i$ \in [1, 100000]}
+\end{figure}
+
+A simple vista pareciera que los comportamientos al dejar una de las variables fijas no cambia el valor de los ajustes. Sin embargo, al hacer Zoom en los gráficos de error, se observa que al dejar el valor $T_i$ fijo el comportamiento del algoritmo es más cercano al lineal que en el caso donde se deja el valor $B_i$ fijo. Esto significa que la variabilidad de los $T_i$ afecta más a los tiempos de ejecución que $B_i$
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_error_bi_fijo_v2.png}
+    \caption{Error de ajuste con $b_i = 100$ fijo y $t_i$ \in [1, 100000]}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_error_ti_fijo_v2.png}
+    \caption{Error de ajuste con $t_i = 100$ fijo y $b_i$ \in [1, 100000]}
+\end{figure}

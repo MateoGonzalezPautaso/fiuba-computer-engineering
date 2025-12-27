@@ -1,0 +1,57 @@
+\section{Optimalidad del algoritmo cuando varían los valores}
+
+
+\subsection{Verificación de optimalidad con datasets propios}
+\textbf{Nota:} Si bien los datasets generados son aleatorios, con la librería Random de Python, se pueden ajustar sus valores mediante el uso de una semilla.
+\begin{itemize}
+    \item Resultados con $f \in [1, 100000]$ y $x = 100$ 
+    \item Resultados con $x \in [1, 100000]$ y $f = 100$
+    \item Resultados con $x, f \in [1, 100000]$
+    \item Resultados con $x, f \in [1, 100000]$, con $x$ ordenado
+    \item Resultados con $x, f \in [1, 100000]$, con $x$ ordenado al revés
+    \item Resultados con $x, f \in [1, 200]$
+\end{itemize}
+
+En todos los apartados listados, los resultados de la implementación del algoritmo por Programación Dinámica y por Backtracking coincidieron. Por lo tanto, podríamos deducir en base a esto que la variabilidad de los valores no afecta la optimalidad del algoritmo. 
+
+\subsection{Verificación de optimalidad con datasets de la catédra}
+\subsubsection{Comparación con resultados conocidos}
+
+Para testear nuestro código, utilizamos los set de datos y las salidas esperadas proporcionadas: 
+
+\begin{table}[h!]
+\centering
+\begin{tabular}{l r}
+\hline
+\textbf{Archivo} & \textbf{Tropas eliminadas} \\
+\hline
+5.txt & 1413 \\
+10.txt & 2118 \\
+10\_bis.txt & 1237 \\
+20.txt & 11603 \\
+50.txt & 3994 \\
+100.txt & 7492 \\
+200.txt & 4230 \\
+500.txt & 15842 \\
+1000.txt & 4508 \\
+5000.txt & 504220 \\
+\hline
+\end{tabular}
+\caption{Cantidad de tropas eliminadas en cada dataset de la cátedra.}
+\end{table}
+
+    
+Para esto implementamos ciertas pruebas que comparaban los resultados. Las mismas están implementadas en funciones de Python del estilo:
+
+\begin{lstlisting}[language=Python]
+def test_10():
+    path_set = "./datasets/10.txt"
+    x, f = parser(path_set)
+    resultado, _ = maximizar_kills(x, f)
+    assert resultado == 2118, "El resultado del dataset de n = 10 no coincide con la salida de catedra"
+    print(f"Cantidad de tropas eliminadas 10.txt = {resultado}")
+\end{lstlisting}
+
+que se pueden encontrar dentro del repositorio. La salida corrobora todos los valores y no falla en ningún $assert$
+
+\newpage

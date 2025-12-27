@@ -1,0 +1,56 @@
+\section{Detalles del algoritmo}
+
+\subsection{Implementación}
+
+A continuación se encuentra la implementación, en Python, del algoritmo desarrollado en los apartados anteriores. Esta implementación consiste en un algoritmo Greedy que busca minimizar la  sumatoria ponderada calculada a partir del orden de las batallas.
+
+Nuestro código cuenta con las características de todo algoritmo Greedy, aplica iterativamente una regla sencilla para buscar el óptimo local en cada estado del algoritmo. La regla sencilla consiste en seleccionar, en cada iteración, como próxima batalla a la que tenga menor cociente $\tfrac{t_i}{b_i}$ dentro de las que aún no se lucharon, esto con el fin de elegir la batalla que adicione el menor término ponderado posible en cada estado, es decir, un óptimo local.  
+
+El siguiente fragmento de código en Python muestra la función desarrollada, que realiza estos pasos y devuelve el valor final de la sumatoria ponderada.
+
+\begin{lstlisting}[language=Python]
+def minimizar_sumatoria(batallas):
+    '''
+    Recibe una lista de tuplas con la informacion de batallas.
+
+    Las batallas son ordenadas segun el cociente t_i / b_i y en ese orden se acumulan los tiempos. Ademas, calcula la sumatoria b_i * F_i
+
+    Cada batalla esta representada como (T_i,B_i) donde:
+        - T_i: tiempo de la batalla i
+        - B_i: peso de la batalla i
+
+    Devuelve el valor del coeficiente de impacto.
+    '''
+    batallas.sort(key = lambda x: x[0] / x[1])
+
+    felicidad_actual = 0
+    res = 0
+
+    n = len(batallas)
+    for i in range(n):
+        batalla = batallas[i]
+        t_i, b_i = batalla
+
+        felicidad_actual += t_i
+        res += (b_i * felicidad_actual)
+
+    return res
+\end{lstlisting}
+
+Como en cada paso iterativo donde se aplica la regla necesitamos buscar la batalla con el coeficiente $\tfrac{t_i}{b_i}$ más pequeño aún no seleccionada, a modo de optimización, optamos por ordenar las batallas por su cociente de manera ascendente.
+
+De este modo, en lugar de ir buscando el mínimo del estado actual en cada iteración, podemos recorrer el arreglo de manera lineal sabiendo que la batalla seleccionada en la iteración $i$ va a ser la de menor cociente posible aún no elegida. 
+
+Además, al necesitar el orden en el que se eligieron las batallas, se optó por un ordenamiento \textit{in-place}. De tal forma, la disposición de las batallas queda comprendida en el mismo arreglo.
+
+\subsection{Complejidad}
+
+\begin{enumerate}
+    \item La complejidad de la función \textbf{sort()} en Python es \textbf{$O(n \cdot log(n))$} en el peor caso. Información extraída de la documentación oficial de Python. 
+    \item La complejidad de la función \textbf{len()} para listas en Python es \textbf{O(1)}
+    \item Se Itera una vez la lista de tuplas \textbf{\textit{batallas}} y se hacen operaciones \textbf{O(1)} en cada iteración, lo cual tienen una complejidad de \textbf{O(n)}
+\end{enumerate}
+    
+En conclusión, el costo temporal del algoritmo está dominado por la operación de ordenamiento inicial, cuya complejidad es \textbf{$O(n \log n)$}. El resto de las operaciones (cálculo de la longitud de la lista, recorrido de las batallas y sumas parciales) son lineales o constantes, y por lo tanto quedan por debajo de la cota de complejidad que aporta el orden. 
+
+Así, la complejidad temporal del algoritmo es $O(n \log n)$, mientras que la complejidad espacial es $O(1)$ porque sort() realiza un ordenamiento in-place y únicamente se utilizan unas pocas variables auxiliares.

@@ -1,0 +1,82 @@
+\section{Pruebas de ejecución}
+
+Esta sección se divide en dos partes generales. La primera consiste en la comparación de los resultados del coeficiente de impacto final conocidos, dados por la cátedra, contra los resultados que se obtienen de ejecutar nuestro algoritmo. La segunda parte consta de mediciones de tiempo sobre sets de prueba generados por nosotros y la corroboración de la complejidad teórica indicada para el algoritmo.
+
+\subsection{Comparación de resultados con sets de la cátedra}
+Para testear nuestro código, utilizamos los set de datos y las salidas esperadas proporcionadas: 
+
+\textbf{10.txt} \rightarrow{} $Coeficiente de impacto = 309600  \checkmark$  \\
+
+\textbf{50.txt} \rightarrow{} $Coeficiente de impacto = 5218700  \checkmark$  \\
+
+\textbf{100.txt} \rightarrow{} $Coeficiente de impacto = 780025365 \checkmark$ \\
+
+\textbf{1000.txt} \rightarrow{} $Coeficiente de impacto = 74329021942 \checkmark$ \\
+
+\textbf{5000.txt} \rightarrow{} $Coeficiente de impacto = 1830026958236 \checkmark$ \\
+
+\textbf{10000.txt} \rightarrow{} $Coeficiente de impacto = 7245315862869 \checkmark$ \\
+
+\textbf{100000.txt} \rightarrow{} $Coeficiente de impacto = 728684685661017 \checkmark$ \\
+    
+
+Para esto implementamos ciertas pruebas que comparaban los resultados. Las mismas están implementadas en funciones de Python del estilo:
+
+\begin{lstlisting}[language=Python]
+def test_10():
+    path_set = "./datasets/10.txt"
+    batallas = parser(path_set)
+    resultado = minimizar_sumatoria(batallas)
+    assert resultado == 309600, "El resultado del dataset de 10 batallas no coincide con la salida de catedra"
+    print(f"Coeficiente de impacto 10.txt = {resultado}")
+\end{lstlisting}
+
+que se pueden encontrar dentro del repositorio.
+La salida corrobora todos los valores y no falla en ningún $assert$
+
+\subsection{Mediciones de tiempo en sets generados}
+
+Se generaron sets de prueba para testear la complejidad real del algoritmo implementado para minimizar el coeficiente de impacto. 
+
+Todo el código relacionado a la generación y medición de tiempo se encuentra dentro del archivo \textbf{'test.py'}. Los sets son generados aleatoriamente, pudiendo elegir parámetros para limitar la variabilidad de los valores $t_i$ y $b_i$, además de la cantidad de batallas a seleccionar.
+
+Al hacer los cálculos temporales, el algoritmo se ejecuta 10 veces sobre los mismos datos y se realiza un promedio sobre los tiempos de ejecución con el objetivo de reducir el ruido y lograr una representación más fiel a la realidad.
+
+El primer gráfico muestra las mediciones de tiempo de las ejecuciones del algoritmo ajustadas a la función de complejidad esperada $(O(n \log n))$. Por otro lado, el segundo muestra el error de ajuste de los datos empíricos obtenidos contra la función de complejidad teórica.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion1.png}
+\end{figure}
+
+Como se puede observar en la imagen, el error de ajuste es muy pequeño, lo que indica que efectivamente el comportamiento del algoritmo implementado es $O(n \log n)$
+
+\subsection{Observaciones sobre la complejidad del algoritmo}
+
+Para verificar de manera más certera la complejidad del algoritmo y su ajuste con el comportamiento $O(n \log n)$, se realizaron pruebas de medición con mayor o menor variabilidad de los valores de $t_i$ y $b_i$. Esto con el objetivo de estudiar al algoritmo bajo diferentes condiciones de ejecución:
+Las siguientes mediciones limitan los valores $t_i$ y $b_i$ al rango especificado. Mostrando los comportamientos de las imágenes.
+
+\subsubsection{$t_i$, $b_i$ \in [1, 10]}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/resultado_max_10.png}
+    \caption{Resultados con $t_i$, $b_i$ \in [1, 10]}
+\end{figure}
+
+\subsubsection{$t_i$, $b_i$ \in [1, 10000]}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/resultado_max_10k.png}
+    \caption{Resultados con $t_i$, $b_i$ \in [1, 10000]}
+\end{figure}
+
+\subsubsection{$t_i$, $b_i$ \in [1, 100000000]}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/resultado_max_100M.png}
+    \caption{Resultados con $t_i$, $b_i$ \in [1, 100000000]}
+\end{figure}
+
+\noindent A partir de estas mediciones, se observa que el tiempo de ejecución sigue el patrón esperado de $O(n \log n)$, sin depender de la variabilidad de los valores. Esto confirma la consistencia del algoritmo bajo distintos rangos de entrada.
+
+Esto se debe a que la complejidad del algoritmo está dada principalmente por el ordenamiento de la lista que contiene las batallas, hecho con la función $sort$ de Python, cuyo funcionamiento tampoco depende de la variabilidad de los valores.

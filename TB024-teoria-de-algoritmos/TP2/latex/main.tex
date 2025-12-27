@@ -1,0 +1,83 @@
+\documentclass{estilo}
+\usepackage[spanish]{babel}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}        % para los vectores columnas
+\usepackage{amsfonts}       % para las negrita de pizarra
+\usepackage{amssymb}        % para simbolos matematicos
+\usepackage{hyperref}       % para utilizar referencias
+\usepackage{multirow}       % para las tablas
+\usepackage{dsfont}
+\usepackage{listings}
+\usepackage{xcolor}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle}
+
+\usepackage{enumitem,multicol,setspace}
+\newcounter{subenum}[enumi] % para las multicolumnas
+\renewcommand{\thesubenum}{\arabic{subenum}}
+\usepackage[nomessages]{fp}
+\FPeval\thecolwidth{round(1/4:4)}% Specify number of columns -> column width
+\newcommand{\newitem}[1]{%
+  \refstepcounter{subenum}%
+  \parbox{\dimexpr\thecolwidth\linewidth-.5\columnsep}{%
+    \makebox[\labelwidth][r]{(\thesubenum)\hspace*{\labelsep}}%
+    #1}\hfill%
+}
+
+\usepackage{scalerel,stackengine} % para el sombrero
+\stackMath
+\newcommand\rhat[1]{%
+\savestack{\tmpbox}{\stretchto{%
+  \scaleto{%
+    \scalerel*[\widthof{\ensuremath{#1}}]{\kern-.6pt\bigwedge\kern-.6pt}%
+    {\rule[-\textheight/2]{1ex}{\textheight}}%WIDTH-LIMITED BIG WEDGE
+  }{\textheight}% 
+}{0.5ex}}%
+\stackon[1pt]{#1}{\tmpbox}%
+}
+\parskip 1ex
+
+\usepackage{mathtools}      % floor y ceil
+\DeclarePairedDelimiter\ceil{\lceil}{\rceil}
+\DeclarePairedDelimiter\floor{\lfloor}{\rfloor} 
+
+\usepackage[style=authoryear-comp]{biblatex}
+
+
+\begin{document}
+\maketitle
+
+\justifying{}
+
+\newpage
+\input{tex/analisis}
+\newpage
+\justifying{
+\input{tex/detalles_algoritmo}
+\input{tex/analisis_optimalidad}
+\input{tex/variabilidad_optimalidad}
+\input{tex/complejidad_con_variabilidad}
+}
+\end{document}

@@ -1,0 +1,26 @@
+\section{Análisis del problema}
+
+En el comienzo del desarrollo del problema, consideramos la posibilidad de plantear la solución al problema del enunciado, inspirándonos en algoritmos ya conocidos y vistos en clase. El primero de ellos fue el problema de la 'mochila', donde modelaríamos un arreglo bidimensional con $(x_i, f_i)$, pero, por la naturaleza del mismo, una implementación así cuenta con limitaciones a la hora de saber cuánto poder acumulado uno tiene en un minuto $i$.
+
+Otra idea propuesta fue plantearlo como el problema de 'Tú a Londres y yo a California', donde tendríamos dos arreglos que en cada índice $i$ representarían una decisión tomada en ese minuto. Lo habríamos modelado de forma que uno de los arreglos siempre se forzara a atacar en el último minuto y el otro a no hacerlo. Si bien esto no tiene mucho sentido, ya que en un arreglo nunca atacarías y en el otro siempre atacarías, nos sirvió como un primer acercamiento a la idea de forzar las decisiones para alcanzar un óptimo.
+
+\subsection{Solución propuesta}
+Finalmente, utilizamos ideas provenientes del 'Problema del cambio' y de 'Osvaldo, el especulador'. Este último resultó especialmente útil ya que nos permitió darnos cuenta de que convenía usar un array en el que cada posición representara un minuto, calculando en cada uno cuál es la máxima cantidad de bajas enemigas que se pueden alcanzar forzándose a atacar en este minuto y analizando los óptimos anteriores.
+
+De esta manera, se puede plantear la ecuación de recurrencia obtenida, considerando un arreglo que almacena los valores óptimos, es decir, la máxima cantidad de enemigos abatidos en cada minuto. Los casos base de la ecuación son:
+\begin{itemize}
+    \item $i = 0$: Representa el minuto 0, por lo tanto el óptimo es 0 enemigos atacados por el hecho de que aún no hubo ningún ataque enemigo ni poder acumulado.
+    \item $i = 1$: En el minuto 1, la mejor decisión que se puede tomar va a ser atacar a los enemigos que llegaron.
+\end{itemize}
+
+Sabiendo esto y tomando ideas del 'Problema del cambio', llegamos al razonamiento siguiente:
+En cada minuto $i$ me fuerzo a atacar y, por esto, debo buscar en que minuto me conviene hacer el último ataque para maximizar la cantidad de enemigos abatidos hasta este minuto. Plasmando esto en una ecuación de recurrencia, nos queda lo siguiente:
+
+\begin{equation}
+    OPT[i] = max(OPT[t] + min(f_{i - t}, x_i)) \forall t < i 
+\end{equation}
+
+\textbf{Detalles de la ecuación:}
+Para calcular el óptimo del minuto $i$ voy a recorrer todos los minutos anteriores al actual y verificar con cuál, también habiendo forzado a atacar en ese otro minuto, se maximiza la cantidad de bajas enemigas. Esto también considerando que el haber atacado en un minuto previo me reducirá la acumulación de poder.  
+
+Sea $x_i$ la cantidad de enemigos que llegan en el minuto $i$ y $f_i$ la cantidad de poder acumulado hasta dicho minuto, definimos $OPT[i]$ como la máxima cantidad de enemigos abatidos al finalizar este minuto, forzando un ataque en el mismo. El parámetro $t$ representa el minuto del último ataque más reciente, y $OPT[t]$ guarda cuánto es el máximo de derribados hasta ese $t$. Por eso, la cantidad de enemigos que se pueden derribar es el óptimo en el minuto $t$ agregándole los derribos por el ataque en el minuto actual que se representa con el mínimo entre el poder acumulado desde el minuto $t$ y $x_i$ (se usa el mínimo porque no puedo abatir más enemigos de los que llegan ni tampoco más de los que me permite mi poder).

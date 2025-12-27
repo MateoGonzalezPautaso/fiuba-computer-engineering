@@ -1,0 +1,190 @@
+\section{Algoritmo Backtracking}
+
+Para hallar la solución óptima al problema de la Tribu del Agua, se creó un algoritmo de backtracking que investiga todas las asignaciones posibles de los maestros en cada uno de los k grupos, con el objetivo de encontrar aquella asignación que minimice el coeficiente posible, es decir, la suma de los cuadrados de los poderes.
+
+El algoritmo usado para esto es el siguiente:
+
+\begin{lstlisting}[language=Python]
+def _tribu_del_agua_bt(maestros_agua, k, i, sol_actual, adic_actual, suma_grupos_actual, mejor_sol, adic_mejor, poder_restante):
+    if i >= len(maestros_agua):
+        if adic_actual < adic_mejor:
+            copia = [list(g) for g in sol_actual]
+            return copia, adic_actual 
+        return mejor_sol, adic_mejor
+    
+    maestro = maestros_agua[i]
+    nombre, poder = maestro
+    restante = poder_restante[i + 1]
+    
+    for g in range(k):
+        suma_sin = suma_grupos_actual[g]
+        suma_con = suma_sin + poder
+        adic_con = adic_actual - (suma_sin ** 2) + (suma_con ** 2)
+
+        sol_actual[g].append(maestro)
+        suma_grupos_actual[g] = suma_con
+
+        cota_minima = calcular_cota_minima(suma_grupos_actual, restante, k)
+        if cota_minima >= adic_mejor:
+            sol_actual[g].pop()
+            suma_grupos_actual[g] = suma_sin
+            continue
+        
+        sol_res, adic_res = _tribu_del_agua_bt(maestros_agua, k, i + 1, sol_actual, adic_con, suma_grupos_actual, mejor_sol, adic_mejor, poder_restante)
+
+        if adic_res < adic_mejor:
+            mejor_sol, adic_mejor = sol_res, adic_res 
+
+        sol_actual[g].pop()
+        suma_grupos_actual[g] = suma_sin
+
+        if suma_sin == 0:
+            break
+
+    return mejor_sol, adic_mejor
+
+def tribu_del_agua_bt(maestros_agua, k):
+    '''
+    maestros_agua = es una lista de tuplas de la forma [(nombre, poder), ...]
+    k = la cantidad de subgrupos a armar
+    '''
+    sol_actual = [[] for i in range(k)]
+    suma_grupos_actual = [0] * k
+
+    mejor_sol, adic_mejor = aproximador_pakku(maestros_agua, k)
+    
+    maestros_agua = sorted(maestros_agua, key=lambda x:x[1], reverse=True)
+
+    n = len(maestros_agua)
+    poder_restante = [0] * (n + 1)
+    for i in range(n - 1, -1, -1):
+        poder_restante[i] = poder_restante[i + 1] + maestros_agua[i][1]
+
+    return _tribu_del_agua_bt(maestros_agua, k, 0, sol_actual, 0, suma_grupos_actual, mejor_sol, adic_mejor, poder_restante)
+\end{lstlisting}
+
+\subsection{Podas y mejoras al algoritmo}
+
+En las primeras iteraciones del algoritmo, no se estaban implementando suficientes optimizaciones como para lograr ejecutar los datasets provistos por la cátedra en un tiempo razonable. Por esta razón, se decidió implementar diversas podas y heurísticas para minimizar al máximo posible la demora del algoritmo al momento de ejecutarse con datasets de tamaño considerable. A continuación se detalla una explicación de cada una de las mejoras implementadas en el algoritmo:
+
+\begin{enumerate}
+    \item \underline{\textbf{Heurística: ordenar a los maestros por poder decreciente}}
+    \item[] Al ordenar a los maestros de esta forma, el algoritmo prioriza el procesamiento de los maestros de mayor poder. De esta manera, se toman las decisiones más impactantes en las llamadas más tempranas de la recursión. Esto tiene dos grandes beneficios: Primero aumenta la probabilidad de encontrar una solución de buena calidad más rápido
+    
+    Segundo, hace que la cota mínima crezca más rápido, logrando así que las podas sean efectivas de manera más temprana.
+    
+    \item \underline{\textbf{Optimización: guardar un arreglo con el poder restante a asignar para cada iteración}}
+    \item[] Para ahorrar el cálculo en cada llamada recursiva del poder restante a asignar, se optó por pre-calcular un arreglo que guarde estos valores y los pase como una constante a la función recursiva \lstinline|_tribu_del_agua_bt|.
+    
+    Este valor es fundamental para el cálculo de la poda por cota mínima. Con esta optimización de pre-cálculo, en lugar de hacer un cálculo $O(n)$ en cada llamada recursiva, se hace un solo recorrido $O(n)$ una única vez para calcular el arreglo \lstinline|poder_restante| y luego realizar accesos $O(1)$ en la recursión, logrando así optimizar el tiempo.
+
+    \item \underline{\textbf{Optimización: Inicializar la mejor solución encontrada con el aproximador de Pakku}}
+    \item[] En las primeras versiones de este algoritmo de backtracking, la mejor solución se inicializaba vacía. Esto provocaba que la poda por cota mínima no funcionara hasta que se encontraba la primera asignación válida, pudiendo ser de mala calidad.
+
+    Para evitar estos problemas, \lstinline|adic_mejor| se inicializa con el aproximador Greedy planteado en el \underline{apartado 5}, logrando que la poda por cota mínima funcione desde la primera llamada. Aunque el cálculo de la solución aproximada represente una complejidad extra de $O(n^2)$, ahorra mucho mas tiempo al accionar las podas que lo que demora en llegar a la solución aproximada.
+
+    \item \underline{\textbf{Poda: Calcular una cota mínima para cada estado de la recursión}}
+    \item[] Esta poda es la más importante del algoritmo y esta implementada en el siguiente bloque de código:
+
+        \begin{lstlisting}[language=Python]
+        ...
+        
+        cota_minima = calcular_cota_minima(suma_grupos_actual, restante, k)
+        if cota_minima >= adic_mejor:
+            sol_actual[g].pop()
+            suma_grupos_actual[g] = suma_sin
+            continue
+
+        ...
+        \end{lstlisting}
+
+    Funciona de la siguiente manera: dado un estado actual de asignaciones de maestros y un cierto poder restante, la funcion \lstinline|calcular_cota_minima| va a calcular el mínimo coeficiente teórico que se puede alcanzar con ese estado actual.
+    El calculo lo hace de la siguiente manera:
+
+    \begin{enumerate}
+        \item Desde un arreglo que representa la sumatoria de poder de cada grupo, va a crear una copia y ordenarlos ascendentemente.
+        
+        \item Iterativamente, va a ir equiparando el poder de los grupos más débiles hasta el nivel del siguiente más fuerte. La lógica entonces es, aumentar el poder el grupo 0 para que alcance al grupo 1; luego aumentar los poderes de los grupos 0 y 1 para que alcancen al 2, y así sucesivamente. 
+        
+        Si se da el caso donde no alcanza el poder para equiparar los grupos, reparte el poder restante equitativamente entre los grupos que se estaban intentando nivelar
+        
+        \item En el caso donde ya están todos los grupos equiparados con el mismo nivel de poder, pero aún sobra poder restante, lo reparte equitativamente entre los $k$ grupos.
+        
+        \item Luego calcula la adición de los cuadrados de los poderes de cada grupo presente en el arreglo.
+        
+        \item Este valor va a representar el mínimo coeficiente teórico que podría alcanzar el estado actual. Este valor siempre será menor o igual al real, porque en la realidad no se puede dividir el poder como convenga ya que este depende de los cada maestro.
+    \end{enumerate}
+
+    Con el valor de la cota mínima, se compara con el coeficiente de la mejor solución ya encontrada. En caso de que esta cota mínima \lstinline|cota_minima| sea mayor o igual que la mejor solución encontrada \lstinline|adic_mejor|, no hay manera posible de que el estado actual llegue a ser mejor, por lo tanto, se poda esa rama.
+    
+    \item \underline{\textbf{Poda: Evitar asignaciones equivalentes para los grupos vacíos}}
+    \item[] Esta poda evita explorar asignaciones de los grupos que son permutaciones equivalentes presentes por ubicar a un maestro en un grupo vacío. 
+    
+    Por ejemplo, con $k = 3$ grupos vacíos, asignar al primer maestro al grupo 1,2 o 3 produce resultados que son idénticos. Esta poda esta implementada en las lineas 34 y 35 del algoritmo.
+\end{enumerate}
+
+\subsection{Pruebas para la correctitud del algoritmo}
+
+Para corroborar que el algoritmo estaba efectivamente llegando a calcular los resultados óptimos, creamos un archivo que almacena una prueba por cada uno de los resultados conocidos de los datasets de la cátedra.
+
+Para estas pruebas se usaron funciones preparadas para ejecutar el archivo de pruebas \lstinline|test_catedra.py| usando \lstinline|pytest|.
+Estas pruebas se encargan de verificar que el coeficiente alcanzado por el algoritmo de backtracking es efectivamente el mismo que el conocido. La forma de las pruebas es la siguiente:
+\begin{lstlisting}[language=Python]
+    def test_5_2():
+        archivo = '5_2.txt'
+        path_set = f"./datasets/{archivo}"
+        x, f = parser(path_set)
+        _, resultado = tribu_del_agua_bt(x, f)
+        assert resultado == 1894340
+        print(f"Coeficiente de {archivo}: {resultado}")
+\end{lstlisting}
+
+Para ejecutar el set de pruebas se debe utilizar el siguiente comando:
+
+\begin{lstlisting}[language=bash]
+    pytest ./test_catedra.py
+\end{lstlisting}
+
+Al ejecutar el comando se puede observar que el resultado de cada uno de las datasets coincide con el esperado.
+
+\begin{lstlisting}[language=bash]
+    pytest ./test_catedra.py 
+    ========================== test session starts ===========================
+    platform linux -- Python 3.12.3, pytest-7.4.4, pluggy-1.4.0
+    rootdir: /home/mateo-gonzalez-pautaso/Desktop/TB024-TdA-BCGP
+    collected 21 items                                                             
+    
+    test_catedra.py .....................                               [100%]
+    
+    =========================== 21 passed in 3.72s ===========================
+\end{lstlisting}
+
+\subsection{Mediciones de tiempos}
+
+El algoritmo de backtracking planteado en este apartado tiene una complejidad temporal exponencial. Si bien las diversas podas y heurísticas implementadas para reducir el espacio de búsqueda ayudan a minimizar los tiempos de ejecución, no cambian la naturaleza exponencial del algoritmo.
+
+A continuación se muestran ciertas mediciones de los tiempos de ejecución del algoritmo, ajustando la curva de tiempo a la función cuadrática y a la función exponencial, con el fin de dimensionar el impacto de la longitud de los dataset en relación al tiempo de ejecución.
+
+
+\subsubsection{Análisis de rendimiento para el caso $k=4$}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_bt_p=500,k=4.png}
+    \caption{Resultados con $poder \in [1, 500]$ y $k = 4$}
+\end{figure}
+
+\subsubsection{Análisis de rendimiento para el caso $k=6$}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_bt_p=500,k=6.png}
+    \caption{Resultados con $poder \in [1, 500]$ y $k = 6$}
+\end{figure}
+
+\subsubsection{Análisis de rendimiento para el caso $k=8$}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/medicion_bt_p=500,k=8.png}
+    \caption{Resultados con $poder \in [1, 500]$ y $k = 8$}
+\end{figure}
+
+\newpage

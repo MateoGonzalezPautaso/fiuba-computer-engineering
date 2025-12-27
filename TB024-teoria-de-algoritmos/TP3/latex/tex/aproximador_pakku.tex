@@ -1,0 +1,189 @@
+\section{Aproximador de Pakku}
+
+\subsection{Implementación y detalles del algoritmo}
+
+\textbf{Parámetros del aproximador}
+    \begin{itemize}
+        \item \textbf{maestros\_agua:} Representa el set de datos representando a los diferentes maestros, siendo una lista de tuplas (maestro, poder)
+        \item \textbf{k:} número entero que representa la cantidad de subgrupos en los que deben ser separados los maestros
+    \end{itemize}
+
+El algoritmo implementa una estrategia Greedy para intentar minimizar la suma de los cuadrados de las fuerzas de los grupos. Antes de distribuir a los maestros, es fundamental ordenarlos de forma descendente según su poder; así nos aseguramos de que los maestros con mayor poder sean asignados primero a los grupos vacíos o con menor suma. Utilizamos a los maestros con menor poder para nivelar al final.
+
+Para mantener una implementación eficiente, se utilizan dos técnicas en el manejo de los datos:
+
+\begin{itemize}
+    \item \textbf{Arreglo auxiliar de sumas:} Se mantiene una lista auxiliar \lstinline|suma_grupos_pakku| que almacena la carga actual de cada grupo. Esto evita tener que recorrer y sumar las listas de maestros dentro de cada grupo repetidamente, reduciendo el costo de calcular la suma total en cada paso.
+    \item \textbf{Cálculo incremental del costo:} En lugar de recalcular la suma de los cuadrados desde cero en cada asignación, se realiza una actualización diferencial. Se resta el cuadrado de la suma anterior del grupo modificado y se suma el cuadrado de la nueva suma:
+\[ adic\_pakku = adic\_pakku - (suma\_sin^2) + (suma\_con^2) \]
+\end{itemize}
+
+Dicho algoritmo se puede observar en la siguiente sección de código:
+
+\begin{lstlisting}[language=Python]
+def grupo_min(suma_grupos_greedy, k):
+    minima_suma = suma_grupos_greedy[0]
+    idx_min = 0
+
+    for i in range(1, k):
+        suma_act = suma_grupos_greedy[i]
+
+        if suma_act < minima_suma:
+            minima_suma = suma_act
+            idx_min = i
+
+    return idx_min
+
+def aproximador_pakku(maestros_agua, k):
+    if k < 0 or not maestros_agua:
+        return None, 0
+    
+    grupos = [[] for i in range(k)]
+    adic_pakku = 0
+    suma_grupos_pakku = [0] * k
+
+    maestros_agua = sorted(maestros_agua, key=lambda x:x[1], reverse=True)
+
+    for maestro in maestros_agua:
+        nombre, poder = maestro
+
+        # Grupo con la menor suma actual
+        idx_g_min = grupo_min(suma_grupos_pakku, k)
+
+        suma_sin = suma_grupos_pakku[idx_g_min]
+        suma_con = suma_sin + poder
+
+        grupos[idx_g_min].append(maestro)
+        suma_grupos_pakku[idx_g_min] = suma_con
+
+        adic_pakku = adic_pakku - (suma_sin ** 2) + (suma_con ** 2)
+
+    return grupos, adic_pakku
+\end{lstlisting}
+
+\subsection{Complejidad}
+
+A continuación se detallan las operaciones dentro del algoritmo que aportan complejidad relevante
+
+\textbf{Complejidad del aproximador:}
+    \begin{enumerate}
+        \item Lo primero que se realiza es la inicialización de una lista de $k$ listas vacías, aportando una complejidad $O(k)$.
+        \item Posteriormente, se crea una lista con $k$ ceros, representando la suma de los grupos y aportando $O(k)$ en complejidad.
+        \item A continuación, se ordenan los maestros de forma descendente según su poder, desembocando en una complejidad $O(n \ log(n))$.
+        \item Se recorre cada maestro y se lo adiciona al grupo con la menor suma actual, por lo que se recorrerán n maestros y los k grupos, dentro de cada iteración también se busca el grupo con la mínima suma dentro de la lista inicializada en el punto 2; lo que aporta una complejidad de $O(k)$ en cada iteración. Al final del recorrido tendremos una complejidad de $O(n * k)$
+    \end{enumerate}
+
+Por lo tanto, en el peor de los casos donde $n = k$, la complejidad total del algoritmo seria $O(n * k) = O(n^2)$
+
+\subsection{Calidad de la aproximación}
+
+Para determinar qué tan buena es la solución $A(I)$ obtenida por el algoritmo de aproximación respecto a la solución óptima $z(I)$, definimos el ratio de aproximación como:
+
+\[ r(I) = \frac{A(I)}{z(I)} \]
+
+Siempre se cumple que $A(I) \geq z(I)$, por lo que buscamos que $r(I)$ lo mas cercana a 1 posible.
+
+\subsubsection{Comparación en instancias manejables}
+
+Cuando el tamaño de $n$ y la cantidad de grupos $k$ permiten la ejecución del algoritmo óptimo (Backtracking) en un tiempo razonable, calculamos el ratio de aproximación exacto.
+
+Se utilizaron los datasets provistos obteniendo los siguientes resultados:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|l|c|c|c|}
+\hline
+\textbf{Dataset} & \textbf{Solución óptima ($z$)} & \textbf{Solución Pakku ($A$)} & \textbf{Ratio ($A/z$)} \\ \hline
+8\_3.txt & \textit{4298131} & \textit{4298131} & \textit{1} \\ \hline
+14\_3.txt & \textit{15659106} & \textit{15664276} & \textit{1,0003301} \\ \hline
+15\_6.txt & \textit{6377225} & \textit{6377501} & \textit{1,0000432} \\ \hline
+18\_6.txt & \textit{10322822} & \textit{10325588} & \textit{1,0002679} \\ \hline
+20\_8.txt & \textit{11417428} & \textit{11423826} & \textit{1,0005603} \\ \hline
+\end{tabular}
+\caption{Comparación de soluciones y ratio de aproximación en datasets pequeños}
+\end{table}
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/ratios_manejables.png}
+    \caption{Resultados de $r(I)$ para datasets de la cátedra}
+\end{figure}
+
+Como se observa, para datasets pequeños, el algoritmo de aproximación obtiene resultados extremadamente cercanos al óptimo, con un error prácticamente despreciable.
+
+\subsubsection{Comparación en instancias inmanejables}
+
+Para las instancias donde el tamaño $n$ (cantidad de maestros) y $k$ (cantidad de grupos) crecen, el algoritmo de Backtracking se vuelve imposible debido a su complejidad exponencial. Por lo tanto, no podemos calcular la solución óptima $z(I)$ para comparar.
+
+Para solucionar esto, utilizamos la estrategia de crear datasets artificiales cuya solución óptima $z(I)$ sea conocida.
+
+Se implementó la funcion \lstinline|generar_dataset_perfecto| en el archivo \lstinline|evaluador_aprox.py|, es la encargada de generar los maestros aleatorios y además construir la solución perfecta conocida:
+
+\begin{enumerate}
+    \item La función recibe una cantidad de grupos $k$ y una suma objetivo por grupo \lstinline|sum_por_grupo|.
+    \item Por cada uno de los $k$ grupos, genera maestros aleatoriamente.
+    \item Para el último maestro de cada grupo, en lugar de un valor aleatorio, le asigna el poder exacto restante para que la suma de ese grupo sea exactamente \lstinline|sum_por_grupo|.
+    \item Al final, tenemos $k$ grupos que suman exactamente lo mismo, lo cual representa la partición más balanceada posible.
+\end{enumerate}
+
+Una vez construido el dataset perfecto, todos los maestros generados se mezclan en una única lista \lstinline|random.shuffle(maestros_global)|. Esta lista oculta la solución perfecta y se pasa como entrada al \lstinline|aproximador_pakku|.
+
+Finalmente, se calcula el ratio $r(I)$ comparando el resultado de Pakku $A(I)$ contra el óptimo conocido $z(I)$.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=1\textwidth]{img/ratios_inmanejables.png}
+    \caption{Resultados de $r(I)$ para datasets muy grandes}
+\end{figure}
+
+Como se observa en el gráfico, el algoritmo de Pakku no logra llegar a la solución óptima ($r(i) > 1$). Sin embargo, el error se mantiene notablemente bajo, incluso para volúmenes de datos muy grandes. Si observamos los valores de $k$ y $n$, podemos llegar a la conclusión que el error tiende a ser ligeramente mayor a medida que $k$ aumenta, pero prácticamente no se ve afectado por $n$.
+
+\subsection{Mediciones de tiempo y comparación con backtracking}
+
+    \subsubsection{Ajuste a la función cuadrática}
+    Para corroborar la complejidad calculada en el punto anterior, se realizaron ciertas mediciones de los tiempos de ejecucion de ese algoritmo para analizar su comportamiento. Luego se estudió su ajuste contra la función $O(n^2)$ y la función $O(n \ log(n))$.
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/ajuste_pakku_1.png}
+        \caption{Resultados con $poder \in [1, 500]$ y $k = 50$}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=1\textwidth]{img/ajuste_pakku_2.png}
+        \caption{Resultados con $poder \in [1, 1000]$ y $k = 30$}
+    \end{figure}
+
+    Como se puede observar, la función aproximadora de Pakku se ajusta mucho mejor a $O(n^2)$ en lugar de $O(n \ log(n))$.
+
+    \subsubsection{Comparación contra backtracking}
+     Para estudiar la diferencia de los tiempos de ejecución entre este algoritmo y el implementado con backtracking, se realizaron gráficos de barras donde se modela los diferentes tiempos que tardó cada algoritmo en algunos de los datasets relevantes provistos por la cátedra
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/pakku_vs_bt_8_3.png}
+        \caption{Comparación Pakku vs Backtracking en $8\_3.txt$}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/pakku_vs_bt_15_6.png}
+        \caption{Comparación Pakku vs Backtracking en $15\_6.txt$}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/pakku_vs_bt_18_6.png}
+        \caption{Comparación Pakku vs Backtracking en $18\_6.txt$}
+    \end{figure}
+
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=0.8\textwidth]{img/pakku_vs_bt_20_8.png}
+        \caption{Comparación Pakku vs Backtracking en $20\_8.txt$}
+    \end{figure}
+
+     En las imágenes anteriores se puede observar la gran diferencia que existe entre los tiempos que tarda cada uno, en especial en los datasets donde los valores $k$ o $n$ (la cantidad de maestros) crece.
+
+\newpage
