@@ -1,0 +1,5 @@
+gcc -g -std=c99 -Wall -Wconversion -Wno-sign-conversion -Wtype-limits -Werror -pedantic -o pruebas *.c
+./pruebas >ejecucion_basica.txt 2>&1
+
+valgrind --leak-check=full --track-origins=yes --show-reachable=yes --error-exitcode=2 ./pruebas
+valgrind --leak-check=full --track-origins=yes --show-reachable=yes --error-exitcode=2 ./pruebas >ejecucion_valgrind.txt 2>&1

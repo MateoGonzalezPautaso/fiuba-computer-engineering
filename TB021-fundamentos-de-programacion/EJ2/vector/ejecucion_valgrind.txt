@@ -1,0 +1,62 @@
+==18975== Memcheck, a memory error detector
+==18975== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==18975== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==18975== Command: ./pruebas
+==18975== 
+INICIO DE PRUEBAS CON ALGUNOS ELEMENTOS
+crear vec con tamaño 5... OK
+largo del vector es 5... OK
+guardar 20 en vec[0] es true... OK
+guardar 30 en vec[1] es true... OK
+guardar 15 en vec[0] es true... OK
+guardar 7 en vec[4] es true... OK
+guardar 35 en vec[5] es false... OK
+guardar 40 en vec[6] es false... OK
+se puede obtener vec[0]... OK
+obtener vec[0] es 15... OK
+se puede obtener vec[1]... OK
+obtener vec[1] es 30... OK
+no se puede obtener vec[5]... OK
+valor no fue modificado... OK
+INICIO DE PRUEBAS DE SUMA
+crear vector suma valido... OK
+longitud es correcta... OK
+sumas corresponden con lo esperado... OK
+INICIO DE PRUEBAS ESCALAR
+valores corresponden con lo esperado... OK
+INICIO DE PRUEBAS DE VOLUMEN
+crear vec_vol con tamaño grande... OK
+largo de vec_vol es el indicado... OK
+se pudieron guardar todos los elementos... OK
+no se puede guardar un elemento en vec_vol[tam]... OK
+se pudieron obtener todos los elementos... OK
+no se puede obtener el valor de vec_vol[tam]... OK
+INICIO DE PRUEBAS DE REDIMENSION
+guardar 5 en vec[0] es true... OK
+guardar 10 en vec[1] es true... OK
+redimensionar a tamaño 10... OK
+El nuevo tamaño del vector es 10... OK
+puedo obtener el valor de vec[0] luego de redimensionar (agrandar)... OK
+el valor contenido en vec[0] es 5... OK
+puedo obtener el valor de vec[1] luego de redimensionar (agrandar)... OK
+el valor contenido en vec[1] es 10... OK
+guardar 50 en vec[5] es true, luego de redimensionar... OK
+puedo obtener el valor de vec[5], luego de redimensionar... OK
+el valor contenido en vec[5] es 50... OK
+redimensionar a tamaño 2... OK
+El nuevo tamaño del vector es 2... OK
+puedo obtener el valor de vec[0] luego de redimensionar (achicar)... OK
+el valor contenido en vec[0] es 5... OK
+puedo obtener el valor de vec[1] luego de redimensionar (achicar)... OK
+el valor contenido en vec[1] es 10... OK
+no puedo obtener el valor de vec[5] luego de redimensionar (achicar)... OK
+no puedo guardar 0 en vec[5] luego de redimensionar (achicar)... OK
+==18975== 
+==18975== HEAP SUMMARY:
+==18975==     in use at exit: 0 bytes in 0 blocks
+==18975==   total heap usage: 17 allocs, 17 frees, 44,388 bytes allocated
+==18975== 
+==18975== All heap blocks were freed -- no leaks are possible
+==18975== 
+==18975== For lists of detected and suppressed errors, rerun with: -s
+==18975== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

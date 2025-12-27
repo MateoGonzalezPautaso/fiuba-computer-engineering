@@ -1,0 +1,167 @@
+==21554== Memcheck, a memory error detector
+==21554== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==21554== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==21554== Command: ./pruebas
+==21554== 
+INICIO DE PRUEBAS CON ALGUNOS ELEMENTOS
+crear vec con tamaño 5... OK
+largo del vector es 5... OK
+guardar 20 en vec[0] es true... OK
+guardar 30 en vec[1] es true... OK
+guardar 15 en vec[0] es true... OK
+guardar 7 en vec[4] es true... OK
+guardar 35 en vec[5] es false... OK
+guardar 40 en vec[6] es false... OK
+se puede obtener vec[0]... OK
+obtener vec[0] es 15... OK
+se puede obtener vec[1]... OK
+obtener vec[1] es 30... OK
+no se puede obtener vec[5]... OK
+valor no fue modificado... OK
+INICIO DE PRUEBAS DE SUMA
+crear vector suma valido... OK
+longitud es correcta... OK
+sumas corresponden con lo esperado... OK
+INICIO DE PRUEBAS ESCALAR
+valores corresponden con lo esperado... OK
+INICIO DE PRUEBAS DE VOLUMEN
+crear vec_vol con tamaño grande... OK
+largo de vec_vol es el indicado... OK
+se pudieron guardar todos los elementos... OK
+no se puede guardar un elemento en vec_vol[tam]... OK
+se pudieron obtener todos los elementos... OK
+no se puede obtener el valor de vec_vol[tam]... OK
+INICIO DE PRUEBAS DE REDIMENSION
+guardar 5 en vec[0] es true... OK
+guardar 10 en vec[1] es true... OK
+redimensionar a tamaño 10... OK
+El nuevo tamaño del vector es 10... OK
+puedo obtener el valor de vec[0] luego de redimensionar (agrandar)... OK
+el valor contenido en vec[0] es 5... OK
+puedo obtener el valor de vec[1] luego de redimensionar (agrandar)... OK
+el valor contenido en vec[1] es 10... OK
+guardar 50 en vec[5] es true, luego de redimensionar... OK
+puedo obtener el valor de vec[5], luego de redimensionar... OK
+el valor contenido en vec[5] es 50... OK
+redimensionar a tamaño 2... OK
+El nuevo tamaño del vector es 2... OK
+puedo obtener el valor de vec[0] luego de redimensionar (achicar)... OK
+el valor contenido en vec[0] es 5... OK
+puedo obtener el valor de vec[1] luego de redimensionar (achicar)... OK
+el valor contenido en vec[1] es 10... OK
+no puedo obtener el valor de vec[5] luego de redimensionar (achicar)... OK
+no puedo guardar 0 en vec[5] luego de redimensionar (achicar)... OK
+==21554== 
+==21554== HEAP SUMMARY:
+==21554==     in use at exit: 40,240 bytes in 14 blocks
+==21554==   total heap usage: 17 allocs, 3 frees, 44,388 bytes allocated
+==21554== 
+==21554== 8 bytes in 1 blocks are indirectly lost in loss record 1 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A3F3: vector_redimensionar (vector.c:84)
+==21554==    by 0x109867: pruebas_vector_redimension (pruebas.c:70)
+==21554==    by 0x10A032: pruebas_vector (pruebas.c:189)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 20 bytes in 1 blocks are indirectly lost in loss record 2 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1D8: vector_crear (vector.c:15)
+==21554==    by 0x10923C: pruebas_vector_algunos_elementos (pruebas.c:15)
+==21554==    by 0x10A01E: pruebas_vector (pruebas.c:185)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 20 bytes in 1 blocks are indirectly lost in loss record 3 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1D8: vector_crear (vector.c:15)
+==21554==    by 0x109A93: pruebas_vector_suma (pruebas.c:93)
+==21554==    by 0x10A023: pruebas_vector (pruebas.c:186)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 20 bytes in 1 blocks are indirectly lost in loss record 4 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1D8: vector_crear (vector.c:15)
+==21554==    by 0x109AA1: pruebas_vector_suma (pruebas.c:94)
+==21554==    by 0x10A023: pruebas_vector (pruebas.c:186)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 20 bytes in 1 blocks are indirectly lost in loss record 5 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1D8: vector_crear (vector.c:15)
+==21554==    by 0x10A357: vector_sumar (vector.c:69)
+==21554==    by 0x109B0F: pruebas_vector_suma (pruebas.c:101)
+==21554==    by 0x10A023: pruebas_vector (pruebas.c:186)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 24 (16 direct, 8 indirect) bytes in 1 blocks are definitely lost in loss record 6 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1AB: vector_crear (vector.c:8)
+==21554==    by 0x1095E5: pruebas_vector_redimension (pruebas.c:47)
+==21554==    by 0x10A032: pruebas_vector (pruebas.c:189)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 36 (16 direct, 20 indirect) bytes in 1 blocks are definitely lost in loss record 7 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1AB: vector_crear (vector.c:8)
+==21554==    by 0x10923C: pruebas_vector_algunos_elementos (pruebas.c:15)
+==21554==    by 0x10A01E: pruebas_vector (pruebas.c:185)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 36 (16 direct, 20 indirect) bytes in 1 blocks are definitely lost in loss record 8 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1AB: vector_crear (vector.c:8)
+==21554==    by 0x109A93: pruebas_vector_suma (pruebas.c:93)
+==21554==    by 0x10A023: pruebas_vector (pruebas.c:186)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 36 (16 direct, 20 indirect) bytes in 1 blocks are definitely lost in loss record 9 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1AB: vector_crear (vector.c:8)
+==21554==    by 0x109AA1: pruebas_vector_suma (pruebas.c:94)
+==21554==    by 0x10A023: pruebas_vector (pruebas.c:186)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 36 (16 direct, 20 indirect) bytes in 1 blocks are definitely lost in loss record 10 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1AB: vector_crear (vector.c:8)
+==21554==    by 0x10A357: vector_sumar (vector.c:69)
+==21554==    by 0x109B0F: pruebas_vector_suma (pruebas.c:101)
+==21554==    by 0x10A023: pruebas_vector (pruebas.c:186)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 40 bytes in 1 blocks are indirectly lost in loss record 11 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1D8: vector_crear (vector.c:15)
+==21554==    by 0x109C9A: pruebas_vector_por_escalar (pruebas.c:123)
+==21554==    by 0x10A028: pruebas_vector (pruebas.c:187)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 56 (16 direct, 40 indirect) bytes in 1 blocks are definitely lost in loss record 12 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1AB: vector_crear (vector.c:8)
+==21554==    by 0x109C9A: pruebas_vector_por_escalar (pruebas.c:123)
+==21554==    by 0x10A028: pruebas_vector (pruebas.c:187)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 40,000 bytes in 1 blocks are indirectly lost in loss record 13 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1D8: vector_crear (vector.c:15)
+==21554==    by 0x109DE9: pruebas_vector_volumen (pruebas.c:152)
+==21554==    by 0x10A02D: pruebas_vector (pruebas.c:188)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== 40,016 (16 direct, 40,000 indirect) bytes in 1 blocks are definitely lost in loss record 14 of 14
+==21554==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==21554==    by 0x10A1AB: vector_crear (vector.c:8)
+==21554==    by 0x109DE9: pruebas_vector_volumen (pruebas.c:152)
+==21554==    by 0x10A02D: pruebas_vector (pruebas.c:188)
+==21554==    by 0x10A042: main (pruebas.c:194)
+==21554== 
+==21554== LEAK SUMMARY:
+==21554==    definitely lost: 112 bytes in 7 blocks
+==21554==    indirectly lost: 40,128 bytes in 7 blocks
+==21554==      possibly lost: 0 bytes in 0 blocks
+==21554==    still reachable: 0 bytes in 0 blocks
+==21554==         suppressed: 0 bytes in 0 blocks
+==21554== 
+==21554== For lists of detected and suppressed errors, rerun with: -s
+==21554== ERROR SUMMARY: 7 errors from 7 contexts (suppressed: 0 from 0)
