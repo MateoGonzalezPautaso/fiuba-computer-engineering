@@ -16,8 +16,8 @@
 | `/asmlab-dev` | Assembly Language Programming |
 | `/microlab-dev` | Microarchitecture & CPU Datapath Design |
 | `/cachelab-dev` | Cache Memory Simulation & Optimization |
-| `Trabajo Final - g12.pdf` | **Final Research Paper:** Analysis of Hardware RNG & Intel DRNG |
-| `Presentacion - g12.pdf` | **Defense Presentation:** Key concepts, architecture diagrams & summary |
+| `research-rng-paper.pdf` | **Final Research Paper:** Analysis of Hardware RNG & Intel DRNG |
+| `research-rng-slides.pdf` | **Defense Presentation:** Key concepts, architecture diagrams & summary |
 
 ---
 
