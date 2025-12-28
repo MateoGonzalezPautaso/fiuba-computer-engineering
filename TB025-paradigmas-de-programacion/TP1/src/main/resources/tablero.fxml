@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
+
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns="http://javafx.com/javafx/23.0.1"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="org.pdp.controller.ControladorTablero">
+
+   <center>
+      <GridPane fx:id="gridTablero"/>
+   </center>
+
+   <left>
+      <VBox spacing="10" style="-fx-padding: 10; -fx-background-color: #2e2b29;">
+         <children>
+            <Label fx:id="labelNivel" style="-fx-text-fill: white;">
+               <font>
+                  <Font size="20.0"/>
+               </font>
+            </Label>
+            <Label fx:id="labelDiamantesRestantesNivel" style="-fx-text-fill: white;"/>
+            <Label fx:id="labelRobots" style="-fx-text-fill: white;"/>
+
+            <Button fx:id="botonTPSafe" text="Teletransportarse seguro" maxWidth="Infinity" onAction="#onClickBotonTPSafe" style="-fx-background-color: #cab69e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;"/>
+            <Label fx:id="teleportSeguroRestante" style="-fx-text-fill: white;"/>
+
+            <Button fx:id="botonTPRand" text="Teletransportarse" maxWidth="Infinity" onAction="#onClickBotonTPRand" style="-fx-background-color: #cab69e; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 8; -fx-padding: 10 20;"/>
+
+            <Label fx:id="cantidadDiamantes" style="-fx-text-fill: white;"/>
+            <Label fx:id="cantidadRobotsQuemados" style="-fx-text-fill: white;"/>
+
+            <HBox spacing="10" alignment="CENTER">
+               <children>
+                  <ImageView fx:id="teclasImage" fitWidth="100" fitHeight="100" preserveRatio="true">
+                     <image> <Image url="@img/teclas.png"/> </image>
+                  </ImageView>
+
+                  <ImageView fx:id="flechasImage" fitWidth="100" fitHeight="100" preserveRatio="true">
+                     <image> <Image url="@img/flechas.png"/> </image>
+                  </ImageView>
+               </children>
+            </HBox>
+
+         </children>
+      </VBox>
+   </left>
+
+</BorderPane>

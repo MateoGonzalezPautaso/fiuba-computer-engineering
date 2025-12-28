@@ -1,0 +1,138 @@
+@startuml
+!theme vibrant
+package "org.pdp.comun" {
+    class Posicion {
+        -int x
+        -int y
+        +actualizar(x, y)
+        +getCopiaPosicion()
+    }
+}
+
+package "org.pdp.model" {
+    interface InteractuaConJugador {
+        +interactuarConJugador(AccionesDeJuego)
+    }
+
+    interface InteractuaConRobot {
+        +interactuarConRobot(Robot, AccionesDeJuego)
+    }
+
+    abstract class ElementoTablero {
+        -Posicion posicion
+        +esTransitableParaRobot()
+        +rutaImagen()
+    }
+
+    class Jugador extends ElementoTablero implements InteractuaConRobot{
+        +desplazarse(MovimientosJugador)
+    }
+
+    class Diamante extends ElementoTablero implements InteractuaConJugador
+
+    class Tablero {
+        -Celda[][] matriz
+        +getElementoEnPosicion(Posicion): ElementoTablero
+        +setElementoEnPosicion(Posicion, ElementoTablero)
+        +iniciarTableroVacio()
+        +moverJugador(Jugador, Posicion, Posicion): InteractuaConJugador
+        +moverRobot(Robot, Posicion, Posicion): InteractuaConRobot
+    }
+
+    class Celda{
+        -ElementoTablero elementoTablero
+    }
+}
+
+
+package "org.pdp.model.enemigos" {
+    abstract class Enemigo extends org.pdp.model.ElementoTablero implements org.pdp.model.InteractuaConJugador
+
+    abstract class Robot extends Enemigo implements org.pdp.model.InteractuaConRobot {
+        +moverRobot(Jugador)
+        +calcularMovimiento(Jugador): MovimientosJugador
+        +cantidadMovimientos(): int
+    }
+
+    class RobotX1 extends Robot {
+        -{static} cantidadMovimientos: int = 1
+    }
+
+    class RobotX2 extends Robot {
+        -{static} cantidadMovimientos: int = 2
+    }
+
+    class Fuego extends Enemigo implements org.pdp.model.InteractuaConRobot
+}
+
+package "org.pdp.model.logicaJuego" {
+    interface AccionesDeJuego{
+        +matarJugador()
+        +chocarRobots(Robot, Robot)
+        +robotPisaFuego(Robot, Fuego)
+        +jugadorCapturaDiamante(Diamante)
+    }
+
+    interface HandlerTeletransportacion{
+        +postTeletransportacion(boolean, InteractuaConJugador)
+    }
+
+    interface HandlerElementos{
+        +quemarRobot(Robot)
+        +agregarFuego(Fuego)
+        +recolectarDiamante(Diamante)
+    }
+
+    interface HandlerNuevoNivel{
+        +reiniciarValoresPorNivel(boolean, InteractuaConJugador)
+        +agregarDiamanteAlNivel(Diamante)
+        +agregarRobotAlNivel(Robot)
+    }
+
+    class GeneradorNiveles {
+        -HandlerNuevoNivel
+        +iniciarNivel(int)
+        -colocarRobots(int, int)
+        -colocarDiamantes()
+    }
+
+    class GestorElementos {
+        -HandlerElementos
+        +crearFuego(Robot, Robot)
+        +quemarRobot(Robot, Fuego)
+        +recolectarDiamante(Diamante)
+    }
+
+    class Teletransportador {
+        -HandlerTeletransportacion
+        +teletransportarRandom()
+        +teletransportarSafe(Posicion)
+    }
+
+    class Juego implements HandlerElementos, HandlerNuevoNivel, HandlerTeletransportacion, AccionesDeJuego  {
+        -Tablero tablero
+        -Jugador jugador
+        -List<ElementoTablero> elementosActivos
+        -List<ElementoTablero> elementosDescartados
+        -int nivelActual
+        -procesarTurnoRobots()
+        +asociarTeclaPresionadaAMovimiento(String)
+    }
+}
+
+org.pdp.model.ElementoTablero --> "1" org.pdp.comun.Posicion
+org.pdp.model.Celda o--> "1" org.pdp.model.ElementoTablero
+org.pdp.model.Tablero "1" *--> "*" org.pdp.model.Celda
+
+org.pdp.model.logicaJuego.Juego "1" *--> "1" org.pdp.model.logicaJuego.Teletransportador
+org.pdp.model.logicaJuego.Juego "1" *--> "1" org.pdp.model.logicaJuego.GestorElementos
+org.pdp.model.logicaJuego.Juego "1" *--> "1" org.pdp.model.logicaJuego.GeneradorNiveles
+
+org.pdp.model.logicaJuego.Juego "1" *--> "1" org.pdp.model.Tablero
+org.pdp.model.logicaJuego.Juego "1" *--> "1" org.pdp.model.Jugador
+
+org.pdp.model.logicaJuego.Teletransportador --> org.pdp.model.Jugador
+org.pdp.model.logicaJuego.Teletransportador --> org.pdp.model.Tablero
+org.pdp.model.logicaJuego.GestorElementos --> org.pdp.model.Tablero
+org.pdp.model.logicaJuego.GeneradorNiveles --> org.pdp.model.Tablero
+@enduml
