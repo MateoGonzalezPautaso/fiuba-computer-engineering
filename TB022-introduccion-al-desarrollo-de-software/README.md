@@ -1,4 +1,4 @@
-# TB022 - Introducción al desarrollo de software
+# TB022 - Introducción al Desarrollo de Software
 
 ## 🔗 External Resources
 > 📝 **Theory & Notes:** My complete lecture notes and summaries are available on Notion:  
