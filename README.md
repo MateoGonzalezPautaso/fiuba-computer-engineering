@@ -12,9 +12,14 @@ Welcome to my personal archive for the **Computer Engineering** degree at the **
 
 | Code | Subject | Language/Stack | Status |
 | :--- | :--- | :--- | :--- |
+| **CB100** | [**Algoritmos y Estructuras de Datos**](./CB100-algoritmos-y-estructuras-de-datos) | C | ✅ Completed |
+| **TA043** | [**Sistemas Operativos**](./TA043-sistemas-operativos) | C, Python, Assembly | ✅ Completed |
+| **TA045** | [**Taller de Programación**](./TA045-taller-de-programacion) | C++ | 🚧 In Progress |
 | **TB021** | [**Fundamentos de Programación**](./TB021-fundamentos-de-programacion) | C, Python | ✅ Completed |
-| **CB001** | Análisis Matemático II | LaTeX / Notes | 🚧 In Progress |
-| **TB024** | Teoría de Algoritmos | Python | 🔜 Planned |
+| **TB022** | [**Introducción al Desarrollo de Software**](./TB022-introduccion-al-desarrollo-de-software) | HTML/CSS, JS, SQL, Bash, Python | ✅ Completed |
+| **TB023** | [**Organización del Computador**](./TB023-organizacion-del-computador) | C, Assembly | ✅ Completed |
+| **TB024** | [**Teoría de Algoritmos**](./TB024-teoria-de-algoritmos) | Python | ✅ Completed |
+| **TB025** | [**Paradigmas de Programación**](./TB025-paradigmas-de-programacion) | Java, Clojure | ✅ Completed |
 
 *(Click on the subject name to browse its specific folder)*
 
