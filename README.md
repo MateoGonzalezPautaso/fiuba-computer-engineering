@@ -23,7 +23,7 @@ Welcome to my personal archive for the **Computer Engineering** degree at the **
 | **TA045** | [**Taller de Programación**](./TA045-taller-de-programacion) | C++ | ✅ Completed |
 | **TA046** | [**Ingeniería de Software 1**](./TA046-ingenieria-de-software-1) | Java, Spring Boot, React, Docker | ✅ Completed |
 | **TA047** | [**Ciencia de Datos**](./TA047-ciencia-de-datos) | Python, Pandas, scikit-learn | ✅ Completed |
-| **TA048** | [**Redes**](./TA048-redes) | | ✅ Completed |
+| **TA048** | [**Redes**](./TA048-redes) | Theory (OSI, TCP/IP, IPv4/IPv6) | ✅ Completed |
 
 *(Click on the subject name to browse its specific folder)*
 
