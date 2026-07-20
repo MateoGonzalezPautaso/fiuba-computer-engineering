@@ -1,0 +1,30 @@
+# ---- Editor / IDE ----
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ---- C / C++ build artifacts ----
+*.o
+*.obj
+*.exe
+*.out
+a.out
+# Compiled lab binaries (kept locally, not committed)
+CB100-algoritmos-y-estructuras-de-datos/TDA_ABB/abb
+CB100-algoritmos-y-estructuras-de-datos/TDA_Hash/hash
+CB100-algoritmos-y-estructuras-de-datos/TDA_Lista/lista
+CB100-algoritmos-y-estructuras-de-datos/TP1/tp1
+
+# ---- Python ----
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+.ipynb_checkpoints/
+
+# ---- Java / Maven ----
+target/
+*.class
