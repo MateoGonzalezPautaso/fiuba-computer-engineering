@@ -8,4 +8,4 @@
   - Mail: bermudezagustin1201@gmail.com
 + ### Mateo Gonzalez Pautaso
   - Padrón: 111699
-  - Mail: mateogonzalezpautaso@gmail.com
+  - Mail: magonzalezp@fi.uba.ar
